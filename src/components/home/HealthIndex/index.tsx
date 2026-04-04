@@ -33,7 +33,7 @@ export default function HealthIndex() {
             color: "#fff",
             borderRight: "1px solid #222223"
         }}>
-            <div style={{ marginBottom: 30, fontWeight: 400, textTransform: "uppercase" }}>Индекс здоровья</div>
+            <div style={{ marginBottom: 30, fontWeight: 400, textTransform: "uppercase", letterSpacing: "0.08em" }}>Индекс здоровья</div>
 
             <PieChart />
 

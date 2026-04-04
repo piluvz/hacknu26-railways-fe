@@ -48,7 +48,7 @@ const ProgressBar = ({ value, status
     <div style={{
         backgroundColor: "#222223", 
         height: 10,
-        width: 188,
+        width: 200,
         borderRadius: 16,
     }}>
         <ReactECharts option={option} style={{ height: 10 }} />

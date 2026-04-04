@@ -27,7 +27,7 @@ export default function PieChart() {
           {
             type: "circle",
             shape: {
-              r: 61.5,
+              r: 52.5,
             },
             style: {
               fill: "#44BD681A", // background color

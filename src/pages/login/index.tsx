@@ -67,13 +67,13 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="relative flex items-center justify-center bg-black w-full h-screen font-">
+    <div className="relative flex items-center justify-center bg-[#171719] w-full h-screen font-">
       <form
         onSubmit={handleSubmit}
         className="relative z-10 bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md mx-4"
       >
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+          <h1 className="text-3xl font-bold text-[#171719] tracking-tight">
             Войти в систему
           </h1>
         </div>

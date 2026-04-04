@@ -1,14 +1,16 @@
 import React, { useState, ChangeEvent, SubmitEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 interface LoginFormData {
-  email: string;
+  username: string;
   password: string;
 }
 
 const LoginPage: React.FC = () => {
+  const { setToken } = useAuth();
   const [formData, setFormData] = useState<LoginFormData>({
-    email: "",
+    username: "",
     password: "",
   });
 
@@ -35,7 +37,7 @@ const LoginPage: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("TODO", {
+      const response = await fetch("http://localhost:8000/api/auth/token", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -51,6 +53,7 @@ const LoginPage: React.FC = () => {
 
       const data = await response.json();
       localStorage.setItem("token", data.token);
+      setToken(data.token);
 
       setSuccessMessage("Login successful! Redirecting...");
       setTimeout(() => {
@@ -93,13 +96,13 @@ const LoginPage: React.FC = () => {
               htmlFor="email"
               className="block text-sm font-semibold text-gray-700"
             >
-              Электронная почта
+              Имя пользователя
             </label>
             <input
-              id="email"
-              type="email"
-              placeholder="user@railways.kz"
-              value={formData.email}
+              id="username"
+              type="username"
+              placeholder="username"
+              value={formData.username}
               onChange={handleChange}
               required
               className="w-full p-4 border border-gray-200 rounded-xl mt-1 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all"

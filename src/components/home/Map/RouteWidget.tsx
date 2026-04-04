@@ -1,38 +1,40 @@
-export default function RouteWidget() { 
-    return (
-        <div className="p-[20px] bg-[#171719] border-1 border-[#222223] rounded-[16px]">
-            <div className="mb-[10px] uppercase text-[#696969]">Маршрут</div>
+export default function RouteWidget() {
+  return (
+    <div className="p-[20px] bg-[#171719] border-1 border-[#222223] rounded-[16px]">
+      <div className="mb-[10px] uppercase text-[#696969]">Маршрут</div>
 
-            <div className="text-[#fff] text-[14px]">
-                <span className="inline-block mr-[14px]">Жилая зона</span>
-                <span className="text-[#696969]">через 30 км · ~14мин</span>
-            </div>
-            <div className="text-[14px] font-bold text-[#EABD52]">Снизить скорость</div>
+      <div className="text-[#fff] text-[14px]">
+        <span className="inline-block mr-[14px]">Жилая зона</span>
+        <span className="text-[#696969]">через 30 км · ~14мин</span>
+      </div>
+      <div className="text-[14px] font-bold text-[#EABD52]">
+        Снизить скорость
+      </div>
 
-            <div className="border-b-1 border-[#222223] my-[15px]" />
+      <div className="border-b-1 border-[#222223] my-[15px]" />
 
+      <div className="text-[10px] text-[#696969]">Следующая остановка:</div>
 
+      <div className="text-[#fff] text-[14px]">
+        <span className="inline-block mr-[14px]">Станция 3</span>
+        <span className="text-[#696969]">через 119 км · ~1ч 02мин</span>
+      </div>
 
-            <div className="text-[10px] text-[#696969]">Следующая остановка:</div>
+      <div className="border-b-1 border-[#222223] my-[15px]" />
 
-            <div className="text-[#fff] text-[14px]">
-                <span className="inline-block mr-[14px]">Станция 3</span>
-                <span className="text-[#696969]">через 119 км · ~1ч 02мин</span>
-            </div>
+      <ProgressStations
+        stations={[
+          { name: "Станция 1", distance: "120 км" },
+          { name: "Станция 2", distance: "250 км" },
+          { name: "Станция 3", distance: "530 км" },
+          { name: "Караганда", distance: "601 км" },
+          { name: "Станция 4", distance: "930 км" },
+          { name: "Станция 5", distance: "1243 км" },
+        ]}
+        currentIndex={3}
+      />
 
-            <div className="border-b-1 border-[#222223] my-[15px]" />
-
-        
-             <ProgressStations stations={[
-                    { name: "Станция 1", distance: "120 км" },
-                    { name: "Станция 2", distance: "250 км" },
-                    { name: "Станция 3", distance: "530 км" },
-                    { name: "Караганда", distance: "601 км" },
-                    { name: "Станция 4", distance: "930 км" },
-                    { name: "Станция 5", distance: "1243 км" },
-                ]} currentIndex={3} />
-
-             {/* <div className="relative w-full">
+      {/* <div className="relative w-full">
                 <div className="h-2.5 w-full bg-[#242426] rounded-full overflow-hidden">
                     <div 
                         className="h-full bg-[#3C96F6] rounded-left transition-all duration-500"
@@ -47,18 +49,16 @@ export default function RouteWidget() {
 
                 </div>
             </div> */}
-        </div>
-    )
+    </div>
+  );
 }
-
-
 
 function ProgressStations({
   stations = [],
   currentIndex = 0,
 }: {
-    stations:  { name: string; distance: string; }[];
-    currentIndex: number;
+  stations: { name: string; distance: string }[];
+  currentIndex: number;
 }) {
   return (
     <div className="w-full">
@@ -75,29 +75,29 @@ function ProgressStations({
         />
 
         <div className="absolute top-[-12px] left-[-25px] flex">
-            {/* Stations */}
-            {stations.map((station, index) => {
+          {/* Stations */}
+          {stations.map((station, index) => {
             const isCompleted = index <= currentIndex;
 
             return (
-                <div
-                    key={index}
+              <div
+                key={index}
                 className="relative flex flex-col items-center text-center w-full"
-                >
+              >
                 {/* Distance label */}
                 <span
-                    className={`mb-2 text-[10px] ${
+                  className={`mb-2 text-[10px] ${
                     isCompleted ? "text-gray-300" : "text-gray-500"
-                    }`}
+                  }`}
                 >
-                    {station.distance}
+                  {station.distance}
                 </span>
 
                 {/* Circle */}
                 <div
-                    className={`w-[16px] h-[16px] rounded-full z-10 flex items-center justify-center
+                  className={`w-[16px] h-[16px] rounded-full z-10 flex items-center justify-center
                     ${
-                        isCompleted
+                      isCompleted
                         ? "bg-blue-500"
                         : "bg-gray-700 border border-gray-600"
                     }
@@ -106,17 +106,15 @@ function ProgressStations({
 
                 {/* Station name */}
                 <span
-                    className={`mt-3 text-[8px] whitespace-nowrap
-                    ${
-                        isCompleted ? "text-blue-400" : "text-gray-500"
-                    }
+                  className={`mt-3 text-[8px] whitespace-nowrap
+                    ${isCompleted ? "text-blue-400" : "text-gray-500"}
                     `}
                 >
-                    {station.name}
+                  {station.name}
                 </span>
-                </div>
+              </div>
             );
-            })}
+          })}
         </div>
       </div>
     </div>

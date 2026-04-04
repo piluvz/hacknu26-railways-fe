@@ -11,11 +11,11 @@ const LoginPage: React.FC = () => {
     email: "",
     password: "",
   });
-  
+
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  
+
   const navigate = useNavigate();
 
   // Typed change handler
@@ -35,14 +35,11 @@ const LoginPage: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(
-        "TODO",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch("TODO", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
       setIsLoading(false);
 
@@ -92,8 +89,11 @@ const LoginPage: React.FC = () => {
 
         <div className="space-y-5">
           <div>
-            <label htmlFor="email" className="block text-sm font-semibold text-gray-700">
-                Электронная почта
+            <label
+              htmlFor="email"
+              className="block text-sm font-semibold text-gray-700"
+            >
+              Электронная почта
             </label>
             <input
               id="email"
@@ -107,8 +107,11 @@ const LoginPage: React.FC = () => {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-semibold text-gray-700">
-                Пароль
+            <label
+              htmlFor="password"
+              className="block text-sm font-semibold text-gray-700"
+            >
+              Пароль
             </label>
             <input
               id="password"
@@ -131,13 +134,30 @@ const LoginPage: React.FC = () => {
         >
           {isLoading ? (
             <div className="flex items-center justify-center">
-              <svg className="animate-spin h-5 w-5 mr-3 text-white" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+              <svg
+                className="animate-spin h-5 w-5 mr-3 text-white"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  fill="none"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                ></path>
               </svg>
               Вход...
             </div>
-          ) : "Войти"}
+          ) : (
+            "Войти"
+          )}
         </button>
       </form>
     </div>

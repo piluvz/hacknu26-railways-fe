@@ -42,6 +42,7 @@ Add TypeScript support, Tailwind CSS v4, a login page (ported from an existing N
 **File:** `src/pages/login/index.tsx`
 
 Ported from the user's Next.js project with the following adaptations:
+
 - Remove `"use client"` directive (not applicable in Vite)
 - Replace `next/image` with a plain `<img>` tag (or remove background image entirely)
 - Replace `useRouter` from `next/navigation` with `useNavigate` from `react-router-dom`
@@ -55,6 +56,7 @@ Ported from the user's Next.js project with the following adaptations:
 **States:** `formData`, `error`, `successMessage`, `isLoading`
 
 **Login flow:**
+
 1. POST to placeholder API
 2. On success: store `token` in `localStorage`, show success message, redirect to `/dashboard` after 2s
 3. On failure: display error message from API response

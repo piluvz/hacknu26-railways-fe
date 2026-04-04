@@ -13,6 +13,7 @@
 ### Task 1: Install all new dependencies
 
 **Files:**
+
 - Modify: `package.json` (via npm install)
 
 - [ ] **Step 1: Install runtime dependencies**
@@ -48,6 +49,7 @@ git commit -m "chore: add typescript, tailwind, and react-router-dom dependencie
 ### Task 2: Add TypeScript configuration
 
 **Files:**
+
 - Create: `tsconfig.json`
 - Create: `tsconfig.node.json`
 
@@ -127,22 +129,20 @@ git commit -m "chore: add TypeScript configuration"
 ### Task 3: Migrate Vite config to TypeScript and add Tailwind plugin
 
 **Files:**
+
 - Create: `vite.config.ts`
 - Delete: `vite.config.js`
 
 - [ ] **Step 1: Create vite.config.ts**
 
 ```ts
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  plugins: [
-    react(),
-    tailwindcss(),
-  ],
-})
+  plugins: [react(), tailwindcss()],
+});
 ```
 
 - [ ] **Step 2: Delete old vite.config.js**
@@ -163,6 +163,7 @@ git commit -m "chore: migrate vite config to TypeScript, add Tailwind v4 plugin"
 ### Task 4: Update ESLint config for TypeScript
 
 **Files:**
+
 - Modify: `eslint.config.js`
 
 - [ ] **Step 1: Install TypeScript ESLint**
@@ -174,43 +175,46 @@ npm install -D @typescript-eslint/eslint-plugin @typescript-eslint/parser
 - [ ] **Step 2: Rewrite eslint.config.js**
 
 ```js
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import tseslint from '@typescript-eslint/eslint-plugin'
-import tsParser from '@typescript-eslint/parser'
-import { defineConfig, globalIgnores } from 'eslint/config'
+import js from "@eslint/js";
+import globals from "globals";
+import reactHooks from "eslint-plugin-react-hooks";
+import reactRefresh from "eslint-plugin-react-refresh";
+import tseslint from "@typescript-eslint/eslint-plugin";
+import tsParser from "@typescript-eslint/parser";
+import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(["dist"]),
   {
-    files: ['**/*.{ts,tsx}'],
+    files: ["**/*.{ts,tsx}"],
     extends: [
       js.configs.recommended,
       reactHooks.configs.flat.recommended,
       reactRefresh.configs.vite,
     ],
     plugins: {
-      '@typescript-eslint': tseslint,
+      "@typescript-eslint": tseslint,
     },
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
       parser: tsParser,
       parserOptions: {
-        ecmaVersion: 'latest',
+        ecmaVersion: "latest",
         ecmaFeatures: { jsx: true },
-        sourceType: 'module',
+        sourceType: "module",
       },
     },
     rules: {
       ...tseslint.configs.recommended.rules,
-      'no-unused-vars': 'off',
-      '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { varsIgnorePattern: "^[A-Z_]" },
+      ],
     },
   },
-])
+]);
 ```
 
 - [ ] **Step 3: Commit**
@@ -225,6 +229,7 @@ git commit -m "chore: configure ESLint for TypeScript"
 ### Task 5: Add Tailwind import to index.css
 
 **Files:**
+
 - Modify: `src/index.css`
 
 - [ ] **Step 1: Prepend Tailwind import to src/index.css**
@@ -251,6 +256,7 @@ git commit -m "chore: add Tailwind CSS v4 import"
 ### Task 6: Migrate main.jsx → main.tsx with BrowserRouter
 
 **Files:**
+
 - Create: `src/main.tsx`
 - Delete: `src/main.jsx`
 - Modify: `index.html`
@@ -258,19 +264,19 @@ git commit -m "chore: add Tailwind CSS v4 import"
 - [ ] **Step 1: Create src/main.tsx**
 
 ```tsx
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom'
-import './index.css'
-import App from './App'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import "./index.css";
+import App from "./App";
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <App />
     </BrowserRouter>
   </StrictMode>,
-)
+);
 ```
 
 - [ ] **Step 2: Delete src/main.jsx**
@@ -282,10 +288,13 @@ rm "/Users/piluvz/Desktop/HACKNU project/kaz-railways-fe/src/main.jsx"
 - [ ] **Step 3: Update index.html script src**
 
 In `index.html`, change:
+
 ```html
 <script type="module" src="/src/main.jsx"></script>
 ```
+
 to:
+
 ```html
 <script type="module" src="/src/main.tsx"></script>
 ```
@@ -302,15 +311,16 @@ git commit -m "feat: migrate main entry to TypeScript, add BrowserRouter"
 ### Task 7: Migrate App.jsx → App.tsx with Routes
 
 **Files:**
+
 - Create: `src/App.tsx`
 - Delete: `src/App.jsx`
 
 - [ ] **Step 1: Create src/App.tsx**
 
 ```tsx
-import { Routes, Route } from 'react-router-dom'
-import HomePage from './pages/home'
-import LoginPage from './pages/login'
+import { Routes, Route } from "react-router-dom";
+import HomePage from "./pages/home";
+import LoginPage from "./pages/login";
 
 function App() {
   return (
@@ -318,10 +328,10 @@ function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
     </Routes>
-  )
+  );
 }
 
-export default App
+export default App;
 ```
 
 - [ ] **Step 2: Delete src/App.jsx**
@@ -342,6 +352,7 @@ git commit -m "feat: migrate App to TypeScript, add Routes for / and /login"
 ### Task 8: Fix existing TypeScript pages
 
 **Files:**
+
 - Modify: `src/pages/home/index.tsx`
 - Modify: `src/components/home/index.tsx`
 
@@ -351,13 +362,10 @@ The current file is missing `export default`. Replace its contents with:
 
 ```tsx
 function HomePage() {
-  return (
-    <div style={{ backgroundColor: '#111112' }}>
-    </div>
-  )
+  return <div style={{ backgroundColor: "#111112" }}></div>;
 }
 
-export default HomePage
+export default HomePage;
 ```
 
 - [ ] **Step 2: Add export default to src/components/home/index.tsx**
@@ -366,13 +374,10 @@ Replace its contents with:
 
 ```tsx
 function Home() {
-  return (
-    <div style={{ backgroundColor: '#111112' }}>
-    </div>
-  )
+  return <div style={{ backgroundColor: "#111112" }}></div>;
 }
 
-export default Home
+export default Home;
 ```
 
 - [ ] **Step 3: Commit**
@@ -387,73 +392,74 @@ git commit -m "fix: add missing export defaults to home page and component"
 ### Task 9: Create the login page
 
 **Files:**
+
 - Create: `src/pages/login/index.tsx`
 
 - [ ] **Step 1: Create src/pages/login/index.tsx**
 
 ```tsx
-import React, { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 
 interface FormData {
-  username_or_email: string
-  password: string
+  username_or_email: string;
+  password: string;
 }
 
 const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
-    username_or_email: '',
-    password: '',
-  })
-  const [error, setError] = useState<string | null>(null)
-  const [successMessage, setSuccessMessage] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const navigate = useNavigate()
+    username_or_email: "",
+    password: "",
+  });
+  const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.id]: e.target.value,
-    })
-  }
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setError(null)
-    setSuccessMessage(null)
-    setIsLoading(true)
+    e.preventDefault();
+    setError(null);
+    setSuccessMessage(null);
+    setIsLoading(true);
 
     try {
       // TODO: replace with kaz-railways login API endpoint
-      const response = await fetch('https://placeholder.api/login/', {
-        method: 'POST',
+      const response = await fetch("https://placeholder.api/login/", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
-      })
+      });
 
-      setIsLoading(false)
+      setIsLoading(false);
 
       if (!response.ok) {
-        const errorData = await response.json() as { message?: string }
-        setError(errorData.message ?? 'Invalid input data. Please try again.')
-        return
+        const errorData = (await response.json()) as { message?: string };
+        setError(errorData.message ?? "Invalid input data. Please try again.");
+        return;
       }
 
-      const data = await response.json() as { token: string }
-      localStorage.setItem('token', data.token)
+      const data = (await response.json()) as { token: string };
+      localStorage.setItem("token", data.token);
 
-      setSuccessMessage('Login successful! Redirecting to the dashboard...')
+      setSuccessMessage("Login successful! Redirecting to the dashboard...");
       setTimeout(() => {
-        navigate('/dashboard')
-      }, 2000)
+        navigate("/dashboard");
+      }, 2000);
     } catch (err) {
-      setIsLoading(false)
-      setError('Login failed. Please try again.')
-      console.error(err)
+      setIsLoading(false);
+      setError("Login failed. Please try again.");
+      console.error(err);
     }
-  }
+  };
 
   return (
     <div className="relative flex items-center justify-center h-screen bg-black">
@@ -469,9 +475,7 @@ const LoginPage: React.FC = () => {
           <div className="mb-4 text-sm text-green-600">{successMessage}</div>
         )}
 
-        {error && (
-          <div className="mb-4 text-sm text-red-600">{error}</div>
-        )}
+        {error && <div className="mb-4 text-sm text-red-600">{error}</div>}
 
         {isLoading && (
           <div className="flex items-center justify-center mb-4">
@@ -547,14 +551,14 @@ const LoginPage: React.FC = () => {
           type="submit"
           disabled={isLoading}
           className={`w-full bg-pink-500 text-white py-3 rounded-lg hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 mb-4 ${
-            isLoading ? 'opacity-50 cursor-not-allowed' : ''
+            isLoading ? "opacity-50 cursor-not-allowed" : ""
           }`}
         >
           Sign In
         </button>
 
         <p className="text-sm text-center text-gray-600">
-          Don't have an account?{' '}
+          Don't have an account?{" "}
           <Link
             to="/register"
             className="text-pink-500 hover:underline font-medium"
@@ -564,10 +568,10 @@ const LoginPage: React.FC = () => {
         </p>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default LoginPage
+export default LoginPage;
 ```
 
 - [ ] **Step 2: Commit**

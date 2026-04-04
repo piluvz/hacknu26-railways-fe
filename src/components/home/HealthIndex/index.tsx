@@ -5,82 +5,103 @@ const metrics = [
   {
     label: "Metric",
     value: 80,
-    status: "normal"
+    status: "normal",
   },
   {
     label: "Metric",
     value: 20,
-    status: "critical"
+    status: "critical",
   },
   {
     label: "Metric",
     value: 60,
-    status: "warning"
+    status: "warning",
   },
   {
     label: "Metric",
     value: 80,
-    status: "normal"
+    status: "normal",
   },
   {
     label: "Metric",
     value: 65,
-    status: "warning"
+    status: "warning",
   },
-]
+];
 
-export default function HealthIndex() {  
-    return (
-        <div style={{
-            display: "flex",
-            flexFlow: "column",
-            alignItems: "center",
-            // gap: 24,
-            padding: "26px 30px",
-            backgroundColor: "#171719",
-            fontSize: 14,
-            color: "#fff",
-            borderRight: "1px solid #222223"
-        }}>
-            <div style={{ width: "100%", marginBottom: 30, fontWeight: 400, textTransform: "uppercase", letterSpacing: "0.08em" }}>Индекс здоровья</div>
+export default function HealthIndex() {
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexFlow: "column",
+        alignItems: "center",
+        // gap: 24,
+        padding: "26px 30px",
+        backgroundColor: "#171719",
+        fontSize: 14,
+        color: "#fff",
+        borderRight: "1px solid #222223",
+      }}
+    >
+      <div
+        style={{
+          width: "100%",
+          marginBottom: 30,
+          fontWeight: 400,
+          textTransform: "uppercase",
+          letterSpacing: "0.08em",
+        }}
+      >
+        Индекс здоровья
+      </div>
 
-            <PieChart />
+      <PieChart />
 
-            <span style={{
-              marginTop: 10,
-              marginBottom: 45,
-              padding: "6px 20px",
-              borderRadius: 40,
-              backgroundColor: "#49C86E1A",
-              border: "1px solid #49C86E",
-              color: "#49C86E",
-              textAlign: "center"
-            }}>
-              Норма
-            </span>
+      <span
+        style={{
+          marginTop: 10,
+          marginBottom: 45,
+          padding: "6px 20px",
+          borderRadius: 40,
+          backgroundColor: "#49C86E1A",
+          border: "1px solid #49C86E",
+          color: "#49C86E",
+          textAlign: "center",
+        }}
+      >
+        Норма
+      </span>
 
-            { metrics.map(metic => 
-              <div style={{ marginBottom: 24 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8, width: "100%", fontWeight: 400 }}>
-                  <span>{ metic.label }</span>
-                  <span>{ metic.value }%</span>
-                </div>
-                <ProgressBar 
-                  value={metic.value}
-                  status={metic.status}
-                />
-              </div>
-            )}
-
-            <div style={{
-              borderTop: "1px solid #222223",
-              paddingTop: 24,
-              fontSize: 14,
+      {metrics.map((metic) => (
+        <div style={{ marginBottom: 24 }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: 8,
+              width: "100%",
               fontWeight: 400,
-              color: "#696969"
-            }}>
-              Формула индекса объясненная
-            </div>
+            }}
+          >
+            <span>{metic.label}</span>
+            <span>{metic.value}%</span>
+          </div>
+          <ProgressBar value={metic.value} status={metic.status} />
         </div>
-    )
+      ))}
+
+      <div
+        style={{
+          borderTop: "1px solid #222223",
+          paddingTop: 24,
+          fontSize: 14,
+          fontWeight: 400,
+          color: "#696969",
+        }}
+      >
+        Формула индекса объясненная
+      </div>
+    </div>
+  );
 }

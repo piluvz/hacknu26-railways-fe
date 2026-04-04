@@ -1,8 +1,6 @@
-import { useState } from "react";
-
-export default function LocomotiveMap() { 
+export default function RouteWidget() { 
     return (
-        <div className="p-[20px] bg-[#171719] border-1 border-[#222223] rounded-[16px] w-[360px]">
+        <div className="p-[20px] bg-[#171719] border-1 border-[#222223] rounded-[16px]">
             <div className="mb-[10px] uppercase text-[#696969]">Маршрут</div>
 
             <div className="text-[#fff] text-[14px]">

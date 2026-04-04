@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
 export default function FuelWidget() {
-  const value = 245;
-  const max = 350;
+  const value = 1240;
+  const max = 2000;
   const percentage = (value / max) * 100;
   const [displayPct, setDisplayPct] = useState(0);
 
@@ -12,8 +12,8 @@ export default function FuelWidget() {
   }, [percentage]);
 
   return (
-    <div className="flex flex-col px-5 pt-4 pb-5 bg-[#171719] text-white border border-[#222223] rounded-xl">
-        <span className="text-sm text-[#696969] uppercase tracking-[0.08em] mb-3">Топливо</span>
+    <div className="flex flex-col px-5 pt-[20px] pb-5 bg-[#171719] text-white border border-[#222223] rounded-xl h-[50%]">
+        <span className="text-sm text-[#696969] uppercase tracking-[0.08em] mb-3 tracking-[0.08em]">Потребление энергии</span>
 
         <div className="flex items-baseline gap-2">
             <span className="text-4xl font-semibold tracking-tight">{value}</span>
@@ -21,7 +21,7 @@ export default function FuelWidget() {
         </div>
 
         <div className='text-[10px] mb-3'>
-            214 л из 1500 л
+            240 кВт·ч из 2 000 кВт·ч
         </div>
 
         {/* Прогресс-бар */}

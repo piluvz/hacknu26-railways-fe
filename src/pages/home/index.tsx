@@ -6,6 +6,7 @@ import BreaksWidget from "../../components/home/BreaksWidget";
 import StatesWidget from "../../components/home/StatesWidget";
 import AlertsPanel from "../../components/home/AlertsPanel";
 import VoltageWidget from "../../components/home/VoltageWidget";
+import TrendsWidget from "../../components/home/TrendsWidget";
 import FuelWidget from "../../components/home/FuelWidget";
 import TemperatureWidget from "../../components/home/TemperatureWidget";
 import PressureWidget from "../../components/home/PressureWidget";
@@ -15,13 +16,13 @@ import RouteWidget from "../../components/home/Map/RouteWidget";
 
 export default function HomePage() { 
     return (
-        <div className='h-full bg-[#111112] w-full '>
+        <div className='h-screen bg-[#111112] w-full flex flex-col overflow-hidden '>
             <Header />
 
-            <div className="flex h-full">
+            <div className="flex flex-1 overflow-hidden">
                 <HealthIndex />
 
-                <div className="flex flex-col gap-5 p-5 w-full">
+                <div className="flex flex-col gap-5 p-5 w-full overflow-y-auto">
                     <div className="flex gap-5">
                         <div className="flex-3">
                             <SpeedWidget />
@@ -56,6 +57,11 @@ export default function HomePage() {
                         </div>
                     </div>
 
+                    <div className="flex ">
+                        <div className="flex-1"><VoltageWidget /></div>
+                    </div>
+
+                    
                     <div className="flex gap-5">
                         <div className="flex-1">
                             <LocomotiveMap />
@@ -64,6 +70,11 @@ export default function HomePage() {
                             <RouteWidget />
                         </div>
                     </div>
+
+                    <div className="flex">
+                        <div className="flex-1"> <TrendsWidget /> </div>
+                    </div>
+                    
                 </div>
             
 

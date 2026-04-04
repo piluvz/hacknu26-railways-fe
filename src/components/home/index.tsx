@@ -1,9 +1,8 @@
-function Home() { 
-    return (
-        <div style={{
-            backgroundColor: "#111112"
-        }}>
-
-        </div>
-    )   
+function Home() {
+  return (
+    <div style={{ backgroundColor: '#111112' }}>
+    </div>
+  )
 }
+
+export default Home

@@ -1,9 +1,7 @@
 function HomePage() { 
     return (
-        <div style={{
-            backgroundColor: "#111112"
-        }}>
-
-        </div>
+        <div> home </div>
     )   
 }
+
+export default HomePage

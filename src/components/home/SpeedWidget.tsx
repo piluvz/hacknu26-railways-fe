@@ -1,11 +1,16 @@
 import ReactECharts from "echarts-for-react";
 import { ArrowBigUp } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTheme } from "../../context/ThemeContext";
 
 // TODO: Replace hardcoded value with data from backend
 const SPEED_FROM_BACKEND = 250; // km/h
 
-function buildGaugeColors(speed: number, maxSpeed: number): [number, string][] {
+function buildGaugeColors(
+  speed: number,
+  maxSpeed: number,
+  emptyColor: string
+): [number, string][] {
   const ratio = Math.min(speed / maxSpeed, 1);
   const steps = 50;
   const result: [number, string][] = [];
@@ -14,18 +19,16 @@ function buildGaugeColors(speed: number, maxSpeed: number): [number, string][] {
     const p = i / steps;
 
     if (p <= ratio) {
-      const t = p / ratio; // 0→1 within filled zone
+      const t = p / ratio;
       let r: number, g: number, b: number;
 
       if (t <= 0.5) {
         const s = t * 2;
-        // green #5AE068 → yellow #F5C842
         r = Math.round(90 + (245 - 90) * s);
         g = Math.round(224 + (200 - 224) * s);
         b = Math.round(104 + (66 - 104) * s);
       } else {
         const s = (t - 0.5) * 2;
-        // yellow #F5C842 → orange #E87A30
         r = Math.round(245 + (232 - 245) * s);
         g = Math.round(200 + (122 - 200) * s);
         b = Math.round(66 + (48 - 66) * s);
@@ -33,7 +36,7 @@ function buildGaugeColors(speed: number, maxSpeed: number): [number, string][] {
 
       result.push([p, `rgb(${r},${g},${b})`]);
     } else {
-      result.push([p, "#383838"]);
+      result.push([p, emptyColor]);
     }
   }
 
@@ -41,6 +44,7 @@ function buildGaugeColors(speed: number, maxSpeed: number): [number, string][] {
 }
 
 export default function SpeedWidget() {
+  const { c } = useTheme();
   const speed = SPEED_FROM_BACKEND;
   const maxSpeed = 300;
   const [displaySpeed, setDisplaySpeed] = useState(0);
@@ -50,7 +54,7 @@ export default function SpeedWidget() {
     const start = performance.now();
     function tick(now: number) {
       const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
       setDisplaySpeed(Math.round(eased * speed));
       if (progress < 1) requestAnimationFrame(tick);
     }
@@ -72,25 +76,21 @@ export default function SpeedWidget() {
         axisLine: {
           lineStyle: {
             width: 18,
-            color: buildGaugeColors(displaySpeed, maxSpeed),
+            color: buildGaugeColors(displaySpeed, maxSpeed, c.gaugeEmpty),
           },
         },
-        pointer: {
-          show: false,
-        },
+        pointer: { show: false },
         axisTick: {
           distance: -22,
           length: 6,
-          lineStyle: { color: "#FFFFFF55", width: 1.5 },
+          lineStyle: { color: c.gaugeTick, width: 1.5 },
         },
         splitLine: {
           distance: -28,
           length: 14,
-          lineStyle: { color: "#FFFFFF88", width: 2 },
+          lineStyle: { color: c.gaugeSplit, width: 2 },
         },
-        axisLabel: {
-          show: false,
-        },
+        axisLabel: { show: false },
         detail: {
           valueAnimation: false,
           offsetCenter: [0, "15%"],
@@ -99,13 +99,13 @@ export default function SpeedWidget() {
             value: {
               fontSize: 50,
               fontWeight: 700,
-              color: "#FFFFFF",
+              color: c.text,
               lineHeight: 40,
               fontFamily: "Inter, sans-serif",
             },
             unit: {
               fontSize: 17,
-              color: "#FFFFFF",
+              color: c.text,
               fontFamily: "Inter, sans-serif",
               fontWeight: 400,
             },
@@ -117,8 +117,11 @@ export default function SpeedWidget() {
   };
 
   return (
-    <div className="flex flex-col px-5 pt-4 bg-[#171719] text-white border border-[#222223] rounded-xl h-full">
-      <div className="flex justify-between text-sm text-[#696969]">
+    <div
+      className="flex flex-col px-5 pt-4 rounded-xl h-full border"
+      style={{ backgroundColor: c.widgetBg, color: c.text, borderColor: c.border }}
+    >
+      <div className="flex justify-between text-sm" style={{ color: c.textMuted }}>
         <span className="uppercase tracking-[0.08em]">Скорость</span>
         <div className="flex items-center justify-center gap-1">
           <ArrowBigUp size={13} color="#EABD52" />

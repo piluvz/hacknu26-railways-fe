@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function FuelWidget() {
+  const { c } = useTheme();
   const value = 1240;
   const max = 2000;
   const percentage = (value / max) * 100;
@@ -12,21 +14,26 @@ export default function FuelWidget() {
   }, [percentage]);
 
   return (
-    <div className="flex flex-col px-5 pt-[20px] pb-5 bg-[#171719] text-white border border-[#222223] rounded-xl h-[50%]">
-        <span className="text-sm text-[#696969] uppercase tracking-[0.08em] mb-3 tracking-[0.08em]">Потребление энергии</span>
+    <div
+      className="flex flex-col px-5 pt-[20px] pb-5 rounded-xl h-[50%] border"
+      style={{ backgroundColor: c.widgetBg, color: c.text, borderColor: c.border }}
+    >
+      <span className="text-sm uppercase tracking-[0.08em] mb-3" style={{ color: c.textMuted }}>
+        Потребление энергии
+      </span>
 
       <div className="flex items-baseline gap-2">
         <span className="text-4xl font-semibold tracking-tight">{value}</span>
         <span className="text-md font-regular">кН</span>
       </div>
 
-        <div className='text-[10px] mb-3'>
-            240 кВт·ч из 2 000 кВт·ч
-        </div>
+      <div className="text-[10px] mb-3" style={{ color: c.textMuted }}>
+        240 кВт·ч из 2 000 кВт·ч
+      </div>
 
       {/* Прогресс-бар */}
       <div className="relative w-full">
-        <div className="h-2.5 w-full bg-[#242426] rounded-full overflow-hidden">
+        <div className="h-2.5 w-full rounded-full overflow-hidden" style={{ backgroundColor: c.progressTrack }}>
           <div
             className="h-full bg-[#EABD52] rounded-left transition-[width] duration-1000 ease-out"
             style={{ width: `${displayPct}%` }}

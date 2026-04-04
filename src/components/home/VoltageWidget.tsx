@@ -1,5 +1,6 @@
 import ReactECharts from "echarts-for-react";
 import { ArrowBigUp } from "lucide-react";
+import { useTheme } from "../../context/ThemeContext";
 
 // TODO: Replace with data from backend (pantograph_voltage field)
 const VOLTAGE_DATA = {
@@ -38,6 +39,8 @@ function StatusPill({ status }: { status: string }) {
 }
 
 export default function VoltageWidget() {
+  const { c } = useTheme();
+
   const option = {
     backgroundColor: "transparent",
     grid: { left: 0, right: 0, top: 8, bottom: 0 },
@@ -82,10 +85,7 @@ export default function VoltageWidget() {
         areaStyle: {
           color: {
             type: "linear",
-            x: 0,
-            y: 0,
-            x2: 0,
-            y2: 1,
+            x: 0, y: 0, x2: 0, y2: 1,
             colorStops: [
               { offset: 0, color: "rgba(60,150,246,0.28)" },
               { offset: 1, color: "rgba(60,150,246,0.01)" },
@@ -100,11 +100,11 @@ export default function VoltageWidget() {
         type: "line",
         lineStyle: { color: "#3C96F6", width: 1, type: "dashed" },
       },
-      backgroundColor: "#1E1E20",
+      backgroundColor: c.widgetBg,
       borderColor: "#3C96F6",
       borderWidth: 1,
       padding: [6, 10],
-      textStyle: { color: "#fff", fontSize: 12 },
+      textStyle: { color: c.text, fontSize: 12 },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       formatter: (params: any) =>
         `<span style="font-weight:600">${params[0].value} кВ</span>`,
@@ -116,30 +116,29 @@ export default function VoltageWidget() {
   };
 
   return (
-    <div className="flex flex-col px-5 pt-4 bg-[#171719] text-white border border-[#222223] rounded-xl overflow-hidden">
+    <div
+      className="flex flex-col px-5 pt-4 rounded-xl overflow-hidden border"
+      style={{ backgroundColor: c.widgetBg, color: c.text, borderColor: c.border }}
+    >
       {/* Header row */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3">
-          <span className="text-sm text-[#696969] uppercase tracking-[0.08em]">
+          <span className="text-sm uppercase tracking-[0.08em]" style={{ color: c.textMuted }}>
             Напряжение
           </span>
           <div className="flex items-center gap-1">
             <ArrowBigUp size={13} color="#EABD52" />
-            <span className="text-xs text-[#EABD52] tracking-[0.08em]">
-              растет
-            </span>
+            <span className="text-xs text-[#EABD52] tracking-[0.08em]">растет</span>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <StatusPill status={VOLTAGE_DATA.status} />
-        </div>
+        <StatusPill status={VOLTAGE_DATA.status} />
       </div>
 
       {/* Value row */}
       <div className="flex items-baseline gap-2 mb-2">
         <span className="text-4xl font-semibold">{VOLTAGE_DATA.value}</span>
         <span className="text-sm">{VOLTAGE_DATA.unit}</span>
-        <span className="text-sm text-[#696969] ml-1">
+        <span className="text-sm ml-1" style={{ color: c.textMuted }}>
           норма {VOLTAGE_DATA.max} {VOLTAGE_DATA.unit}
         </span>
       </div>
@@ -147,7 +146,7 @@ export default function VoltageWidget() {
       {/* Chart */}
       <div className="relative">
         <ReactECharts option={option} style={{ height: 90 }} />
-        <div className="flex justify-between text-xs text-[#696969] px-1 -mt-5 pb-3">
+        <div className="flex justify-between text-xs px-1 -mt-5 pb-3" style={{ color: c.textMuted }}>
           <span>2 минуты назад</span>
           <span>сейчас</span>
         </div>

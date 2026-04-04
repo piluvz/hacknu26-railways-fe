@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTheme } from "../../context/ThemeContext";
 
 type AlertSeverity = "critical" | "warning";
 
@@ -40,26 +41,23 @@ const SEVERITY_CONFIG: Record<
     border: string;
     bg: string;
     actionColor: string;
-    label: string;
   }
 > = {
   critical: {
     badge: "КРИТИЧНО",
     badgeBg: "#E23F3F",
-    badgeText: "#171719",
+    badgeText: "#FFFFFF",
     border: "#E23F3F",
     bg: "rgba(226, 63, 63, 0.2)",
     actionColor: "#E23F3F",
-    label: "Критично",
   },
   warning: {
     badge: "ВНИМАНИЕ",
     badgeBg: "#EABD52",
-    badgeText: "#1a1400",
+    badgeText: "#FFFFFF",
     border: "#EABD52",
     bg: "rgba(234, 189, 82, 0.2)",
     actionColor: "#EABD52",
-    label: "Внимание",
   },
 };
 
@@ -79,6 +77,7 @@ const PULSE_STYLE = `
 `;
 
 function AlertCard({ alert, index }: { alert: AlertItem; index: number }) {
+  const { c } = useTheme();
   const [visible, setVisible] = useState(false);
   const cfg = SEVERITY_CONFIG[alert.severity];
 
@@ -102,7 +101,6 @@ function AlertCard({ alert, index }: { alert: AlertItem; index: number }) {
             : "none",
       }}
     >
-      {/* Top row: badge + time */}
       <div className="flex justify-between">
         <span
           className="text-[13px] font-semibold uppercase px-2 py-0.5 rounded-md tracking-wide"
@@ -110,18 +108,16 @@ function AlertCard({ alert, index }: { alert: AlertItem; index: number }) {
         >
           {cfg.badge}
         </span>
-        <span className="text-xs text-white font-light">{alert.time}</span>
+        <span className="text-xs font-light" style={{ color: c.text }}>{alert.time}</span>
       </div>
 
-      {/* Title + description */}
       <div className="flex flex-col gap-1">
-        <span className="text-[15px] font-semibold text-white">
+        <span className="text-[15px] font-semibold" style={{ color: c.text }}>
           {alert.title}
         </span>
-        <span className="text-[13px] text-[#C2C0B6]">{alert.description}</span>
+        <span className="text-[13px]" style={{ color: c.alertDesc }}>{alert.description}</span>
       </div>
 
-      {/* Action */}
       <span className="text-[13px]" style={{ color: cfg.actionColor }}>
         → {alert.action}
       </span>
@@ -130,15 +126,18 @@ function AlertCard({ alert, index }: { alert: AlertItem; index: number }) {
 }
 
 export default function AlertsPanel() {
+  const { c } = useTheme();
   const alerts = ALERTS_FROM_BACKEND;
 
   return (
-    <div className="flex flex-col w-[250px] px-5 py-5 bg-[#171719] border-l border-[#222223] h-full">
+    <div
+      className="flex flex-col w-[250px] px-5 py-5 border-l h-full"
+      style={{ backgroundColor: c.widgetBg, borderColor: c.border }}
+    >
       <style>{PULSE_STYLE}</style>
 
-      {/* Header */}
       <div className="flex items-center justify-between mb-5">
-        <span className="text-sm text-white uppercase tracking-[0.08em]">
+        <span className="text-sm uppercase tracking-[0.08em]" style={{ color: c.text }}>
           Алерты
         </span>
         <span
@@ -149,7 +148,6 @@ export default function AlertsPanel() {
         </span>
       </div>
 
-      {/* Alert cards */}
       <div className="flex flex-col gap-4">
         {alerts.map((alert, i) => (
           <AlertCard key={alert.id} alert={alert} index={i} />

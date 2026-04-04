@@ -1,5 +1,6 @@
 import Header from "../../components/home/Header";
 import HealthIndex from "../../components/home/HealthIndex";
+import { useTheme } from "../../context/ThemeContext";
 import SmallBarChart from "../../components/home/SmallBarChart";
 import SpeedWidget from "../../components/home/SpeedWidget";
 import BreaksWidget from "../../components/home/BreaksWidget";
@@ -15,8 +16,9 @@ import LocomotiveMap from "../../components/home/Map/LocomotiveMap";
 import RouteWidget from "../../components/home/Map/RouteWidget";
 
 export default function HomePage() {
+  const { c } = useTheme();
   return (
-    <div className="h-screen bg-[#111112] w-full flex flex-col overflow-hidden ">
+    <div className="h-screen w-full flex flex-col overflow-hidden" style={{ backgroundColor: c.pageBg }}>
       <Header />
 
       <div className="flex flex-1 overflow-hidden">

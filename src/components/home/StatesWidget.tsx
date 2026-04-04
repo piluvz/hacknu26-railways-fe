@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTheme } from "../../context/ThemeContext";
 
 type NodeStatus = "ok" | "warning" | "error";
 
@@ -42,6 +43,7 @@ const ALERT_NODES = NODES_FROM_BACKEND.filter((n) => n.status === "error").map(
 );
 
 function NodeCard({ node, index }: { node: NodeData; index: number }) {
+  const { c } = useTheme();
   const [visible, setVisible] = useState(false);
   const cfg = STATUS_CONFIG[node.status];
 
@@ -61,7 +63,7 @@ function NodeCard({ node, index }: { node: NodeData; index: number }) {
         transition: "opacity 0.4s ease, transform 0.4s ease",
       }}
     >
-      <span className="text-xs font-regular text-white break-words">
+      <span className="text-xs font-regular break-words" style={{ color: c.text }}>
         {node.label}
       </span>
       <span className="text-xs font-semibold" style={{ color: cfg.color }}>
@@ -72,11 +74,15 @@ function NodeCard({ node, index }: { node: NodeData; index: number }) {
 }
 
 export default function StatesWidget() {
+  const { c } = useTheme();
   const nodes = NODES_FROM_BACKEND;
 
   return (
-    <div className="flex flex-col px-5 pt-4 pb-5 bg-[#171719] text-white border border-[#222223] rounded-xl h-full">
-      <span className="text-sm text-[#696969] uppercase tracking-[0.08em] mb-3">
+    <div
+      className="flex flex-col px-5 pt-4 pb-5 rounded-xl h-full border"
+      style={{ backgroundColor: c.widgetBg, color: c.text, borderColor: c.border }}
+    >
+      <span className="text-sm uppercase tracking-[0.08em] mb-3" style={{ color: c.textMuted }}>
         Состояние узлов
       </span>
 

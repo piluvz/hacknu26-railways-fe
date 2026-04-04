@@ -1,47 +1,29 @@
 import ProgressBar from "./ProgressBar";
 import PieChart from "./PieChart";
+import { useTheme } from "../../../context/ThemeContext";
 
 const metrics = [
-  {
-    label: "Metric",
-    value: 80,
-    status: "normal",
-  },
-  {
-    label: "Metric",
-    value: 20,
-    status: "critical",
-  },
-  {
-    label: "Metric",
-    value: 60,
-    status: "warning",
-  },
-  {
-    label: "Metric",
-    value: 80,
-    status: "normal",
-  },
-  {
-    label: "Metric",
-    value: 65,
-    status: "warning",
-  },
+  { label: "Metric", value: 80, status: "normal" },
+  { label: "Metric", value: 20, status: "critical" },
+  { label: "Metric", value: 60, status: "warning" },
+  { label: "Metric", value: 80, status: "normal" },
+  { label: "Metric", value: 65, status: "warning" },
 ];
 
 export default function HealthIndex() {
+  const { c } = useTheme();
+
   return (
     <div
       style={{
         display: "flex",
         flexFlow: "column",
         alignItems: "center",
-        // gap: 24,
         padding: "26px 30px",
-        backgroundColor: "#171719",
+        backgroundColor: c.widgetBg,
         fontSize: 14,
-        color: "#fff",
-        borderRight: "1px solid #222223",
+        color: c.text,
+        borderRight: `1px solid ${c.border}`,
       }}
     >
       <div
@@ -73,8 +55,8 @@ export default function HealthIndex() {
         Норма
       </span>
 
-      {metrics.map((metic) => (
-        <div style={{ marginBottom: 24 }}>
+      {metrics.map((metric, i) => (
+        <div key={i} style={{ marginBottom: 24 }}>
           <div
             style={{
               display: "flex",
@@ -84,20 +66,20 @@ export default function HealthIndex() {
               fontWeight: 400,
             }}
           >
-            <span>{metic.label}</span>
-            <span>{metic.value}%</span>
+            <span>{metric.label}</span>
+            <span>{metric.value}%</span>
           </div>
-          <ProgressBar value={metic.value} status={metic.status} />
+          <ProgressBar value={metric.value} status={metric.status} />
         </div>
       ))}
 
       <div
         style={{
-          borderTop: "1px solid #222223",
+          borderTop: `1px solid ${c.border}`,
           paddingTop: 24,
           fontSize: 14,
           fontWeight: 400,
-          color: "#696969",
+          color: c.textMuted,
         }}
       >
         Формула индекса объясненная

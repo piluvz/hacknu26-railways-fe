@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
+import { useTheme } from "../../../context/ThemeContext";
 
 export default function ProgressBar({ value, status }: {
     value: number;
     status: string;
 }) {
-    const color = status === "normal" 
+    const { c } = useTheme();
+    const color = status === "normal"
         ? "#49C86E"
-        : status === "critical" 
+        : status === "critical"
         ? "#E23F3F"
         : "#EABD52";
     const max = 100;
     const percentage = (value / max) * 100;
 
     const [displayPct, setDisplayPct] = useState(0);
-        
+
     useEffect(() => {
         const timer = setTimeout(() => setDisplayPct(percentage), 50);
         return () => clearTimeout(timer);
@@ -21,23 +23,20 @@ export default function ProgressBar({ value, status }: {
 
     return (
         <div className="relative w-full">
-            <div className="h-2.5 w-full bg-[#242426] rounded-full overflow-hidden">
-            <div
-                className="h-full rounded-left transition-[width] duration-1000 ease-out"
-                style={{ width: `${displayPct}%`, backgroundColor: color }}
-            />
+            <div className="h-2.5 w-full rounded-full overflow-hidden" style={{ backgroundColor: c.progressTrack }}>
+                <div
+                    className="h-full rounded-left transition-[width] duration-1000 ease-out"
+                    style={{ width: `${displayPct}%`, backgroundColor: color }}
+                />
             </div>
 
-            {/* Максимальная отметка */}
             <div className="absolute top-[-4px] right-[20%] flex flex-col items-center">
                 <div className="h-5 w-[3px] bg-[#E23F3F] rounded-full" />
             </div>
 
-
-            {/*  отметка */}
             <div className="absolute top-[-4px] left-[20%] flex flex-col items-center">
                 <div className="h-5 w-[3px] bg-[#F7A92E] rounded-full" />
             </div>
         </div>
     );
-};
+}

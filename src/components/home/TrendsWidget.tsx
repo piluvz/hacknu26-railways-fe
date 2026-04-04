@@ -1,5 +1,6 @@
 import ReactECharts from "echarts-for-react";
 import { ArrowBigUp, ArrowBigDown } from "lucide-react";
+import { useTheme } from "../../context/ThemeContext";
 
 // TODO: Replace with data from backend
 const TRENDS_DATA = [
@@ -23,9 +24,7 @@ const TRENDS_DATA = [
     color: "#3C96F6",
     yMin: 1,
     yMax: 4,
-    data: [
-      1.1, 1.1, 1.8, 1.8, 2.2, 2.5, 2.8, 3.0, 3.2, 3.5, 3.8, 3.8, 3.75, 3.7,
-    ],
+    data: [1.1, 1.1, 1.8, 1.8, 2.2, 2.5, 2.8, 3.0, 3.2, 3.5, 3.8, 3.8, 3.75, 3.7],
   },
   {
     id: "temp",
@@ -51,16 +50,9 @@ interface TrendCardProps {
   yMax: number;
 }
 
-function TrendCard({
-  title,
-  value,
-  unit,
-  trend,
-  color,
-  data,
-  yMin,
-  yMax,
-}: TrendCardProps) {
+function TrendCard({ title, value, unit, trend, color, data, yMin, yMax }: TrendCardProps) {
+  const { c } = useTheme();
+
   const option = {
     backgroundColor: "transparent",
     grid: { left: 32, right: 4, top: 8, bottom: 4 },
@@ -76,7 +68,7 @@ function TrendCard({
       max: yMax,
       splitNumber: 1,
       axisLabel: {
-        color: "#555",
+        color: c.textMuted,
         fontSize: 11,
         fontFamily: "Inter, sans-serif",
         formatter: (val: number) =>
@@ -95,10 +87,7 @@ function TrendCard({
           borderRadius: [2, 2, 0, 0],
           color: {
             type: "linear",
-            x: 0,
-            y: 0,
-            x2: 0,
-            y2: 1,
+            x: 0, y: 0, x2: 0, y2: 1,
             colorStops: [
               { offset: 0, color: color + "DD" },
               { offset: 0.05, color: color + "99" },
@@ -119,11 +108,11 @@ function TrendCard({
         type: "shadow",
         shadowStyle: { color: "rgba(255,255,255,0.04)" },
       },
-      backgroundColor: "#1E1E20",
+      backgroundColor: c.widgetBg,
       borderColor: color,
       borderWidth: 1,
       padding: [6, 10],
-      textStyle: { color: "#fff", fontSize: 12 },
+      textStyle: { color: c.text, fontSize: 12 },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       formatter: (params: any) =>
         `<span style="font-weight:600;color:${color}">${params[0].value} ${unit}</span>`,
@@ -132,17 +121,15 @@ function TrendCard({
 
   return (
     <div className="flex flex-col flex-1 min-w-0">
-      {/* Title */}
-      <span className="text-[15px] text-white mb-1 tracking-[0.08em]">
+      <span className="text-[15px] mb-1 tracking-[0.08em]" style={{ color: c.text }}>
         {title}
       </span>
 
-      {/* Value + trend */}
       <div className="flex items-baseline gap-2 mb-3">
         <span className="text-4xl font-semibold" style={{ color }}>
           {value}
         </span>
-        <span className="text-sm text-[#696969]">{unit}</span>
+        <span className="text-sm" style={{ color: c.textMuted }}>{unit}</span>
         <div className="flex items-center gap-1 ml-2">
           {trend === "up" ? (
             <ArrowBigUp size={13} color="#EABD52" />
@@ -155,26 +142,28 @@ function TrendCard({
         </div>
       </div>
 
-      {/* Chart */}
       <ReactECharts option={option} style={{ height: 100 }} />
     </div>
   );
 }
 
-const DIVIDER = <div className="w-px bg-[#2A2A2C] self-stretch mx-2" />;
-
 export default function TrendsWidget() {
+  const { c } = useTheme();
+
+  const DIVIDER = <div className="w-px self-stretch mx-2" style={{ backgroundColor: c.innerBorder }} />;
+
   return (
-    <div className="flex flex-col px-5 pt-4 pb-6 bg-[#171719] text-white border border-[#222223] rounded-xl">
-      {/* Header */}
+    <div
+      className="flex flex-col px-5 pt-4 pb-6 rounded-xl border"
+      style={{ backgroundColor: c.widgetBg, color: c.text, borderColor: c.border }}
+    >
       <div className="flex items-center gap-7 mb-4">
-        <span className="text-sm text-[#696969] uppercase tracking-[0.08em]">
+        <span className="text-sm uppercase tracking-[0.08em]" style={{ color: c.textMuted }}>
           Тренды
         </span>
-        <span className="text-sm text-[#696969]">Последние 20 минут</span>
+        <span className="text-sm" style={{ color: c.textMuted }}>Последние 20 минут</span>
       </div>
 
-      {/* Cards */}
       <div className="flex gap-5">
         {TRENDS_DATA.map((t, i) => (
           <>

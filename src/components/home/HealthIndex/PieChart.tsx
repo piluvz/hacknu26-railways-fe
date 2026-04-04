@@ -1,6 +1,8 @@
 import ReactECharts from "echarts-for-react";
+import { useTheme } from "../../../context/ThemeContext";
 
 export default function PieChart() {
+  const { c } = useTheme();
   const value = 89;
   const total = 100;
 
@@ -8,7 +10,7 @@ export default function PieChart() {
     series: [
       {
         type: "pie",
-        radius: ["70%", "90%"], // inner & outer radius → creates the hole
+        radius: ["70%", "90%"],
         avoidLabelOverlap: false,
         label: { show: false },
         data: [
@@ -23,38 +25,31 @@ export default function PieChart() {
       left: "center",
       top: "center",
       children: [
-        // Background circle (optional)
         {
           type: "circle",
-          shape: {
-            r: 52.5,
-          },
-          style: {
-            fill: "#44BD681A", // background color
-          },
+          shape: { r: 52.5 },
+          style: { fill: "#44BD681A" },
           left: "center",
           top: "center",
         },
-        // Big number (89)
         {
           type: "text",
           style: {
             text: `${value}`,
             fontSize: 48,
             fontWeight: 600,
-            fill: "#fff",
+            fill: c.text,
           },
           left: "center",
           top: "center",
         },
-        // Smaller "/100"
         {
           type: "text",
           style: {
             text: `/${total}`,
             fontSize: 14,
             fontWeight: 400,
-            fill: "#FFFFFF4D",
+            fill: c.textSub,
           },
           left: 0,
           top: 20,
@@ -64,12 +59,7 @@ export default function PieChart() {
   };
 
   return (
-    <div
-      style={{
-        height: 150,
-        width: "100%",
-      }}
-    >
+    <div style={{ height: 150, width: "100%" }}>
       <ReactECharts option={option} style={{ height: 150 }} />
     </div>
   );

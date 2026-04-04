@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Radio, Download } from "lucide-react";
+import { useTheme } from "../../context/ThemeContext";
 
 // TODO: Replace with data from backend
 const KM_POINTS = [120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240];
@@ -19,7 +20,6 @@ function DotTooltip({ label }: { label: string }) {
             }}
         >
             {label}
-            {/* arrow */}
             <div
                 className="absolute top-full left-1/2 -translate-x-1/2"
                 style={{
@@ -35,22 +35,21 @@ function DotTooltip({ label }: { label: string }) {
 }
 
 export default function HistoryBar() {
+    const { c } = useTheme();
     const [hovered, setHovered] = useState<number | "now" | null>(null);
 
     return (
         <div
-            className="fixed bottom-0 left-0 right-0 z-50 flex items-center px-6 py-7  gap-5 border-t border-[#222223]"
-            style={{ backgroundColor: "#0F0F0F", height: 90 }}
+            className="fixed bottom-0 left-0 right-0 z-50 flex items-center px-6 py-7 gap-5 border-t"
+            style={{ backgroundColor: c.historyBg, borderColor: c.border, height: 90 }}
         >
-            {/* Label + Timeline — takes most of the space */}
+            {/* Label + Timeline */}
             <div className="flex flex-col flex-1 min-w-0 justify-center gap-2">
-                <span className="text-xs text-white font-semibold uppercase tracking-[0.1em]">
+                <span className="text-xs font-semibold uppercase tracking-[0.1em]" style={{ color: c.text }}>
                     История
                 </span>
 
-                {/* Dots + line */}
                 <div className="relative flex items-start">
-                    {/* Connecting line — sits at dot center (7px = half of w-3.5 = 14px) */}
                     <div
                         className="absolute left-0 right-0 h-[3px]"
                         style={{ backgroundColor: GOLD, top: 6 }}
@@ -73,7 +72,7 @@ export default function HistoryBar() {
                                         boxShadow: hovered === km ? `0 0 8px ${GOLD}BB` : "none",
                                     }}
                                 />
-                                <span className="text-[10px] text-[#555] whitespace-nowrap mt-1.5">
+                                <span className="text-[10px] whitespace-nowrap mt-1.5" style={{ color: c.textMuted }}>
                                     {km} км
                                 </span>
                             </div>
@@ -96,9 +95,7 @@ export default function HistoryBar() {
                                     transform: hovered === "now" ? "scale(1.4)" : "scale(1)",
                                 }}
                             />
-                            <span
-                                className="text-[10px] font-medium whitespace-nowrap mt-1.5 text-[#44BD68]"
-                            >
+                            <span className="text-[10px] font-medium whitespace-nowrap mt-1.5 text-[#44BD68]">
                                 Сейчас
                             </span>
                         </div>
@@ -106,7 +103,7 @@ export default function HistoryBar() {
                 </div>
             </div>
 
-            {/* Buttons — shrink to content */}
+            {/* Buttons */}
             <div className="flex flex-col gap-2 w-fit items-end">
                 <button
                     className="w-fit flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-white transition-opacity hover:opacity-90 whitespace-nowrap"

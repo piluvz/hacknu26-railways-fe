@@ -1,9 +1,15 @@
+import { useTheme } from "../../context/ThemeContext";
+
 export default function BreaksWidget() {
+  const { c } = useTheme();
   const value = 0;
 
   return (
-    <div className="flex flex-col px-5 py-4 bg-[#171719] text-white border border-[#222223] rounded-xl h-full">
-      <span className="text-sm text-[#696969] uppercase tracking-[0.08em] mb-3">
+    <div
+      className="flex flex-col px-5 py-4 rounded-xl h-full border"
+      style={{ backgroundColor: c.widgetBg, color: c.text, borderColor: c.border }}
+    >
+      <span className="text-sm uppercase tracking-[0.08em] mb-3" style={{ color: c.textMuted }}>
         Тормоза
       </span>
 

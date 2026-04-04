@@ -117,7 +117,7 @@ export default function SpeedWidget() {
     };
 
     return (
-        <div className="flex flex-col px-5 pt-4 bg-[#171719] text-white border border-[#222223] rounded-xl">
+        <div className="flex flex-col px-5 pt-4 bg-[#171719] text-white border border-[#222223] rounded-xl h-full">
             <div className="flex justify-between text-sm text-[#696969]">
                 <span className="uppercase tracking-[0.08em]">Скорость</span>
                 <div className="flex items-center justify-center gap-1">

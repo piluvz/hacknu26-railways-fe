@@ -12,7 +12,7 @@ export default function HomePage() {
 
             <div style={{
                 display: "flex",
-                height: "calc(100%-68px)",
+                height: "calc(100vh - 68px)",
             }}>
                 <HealthIndex />
             </div>

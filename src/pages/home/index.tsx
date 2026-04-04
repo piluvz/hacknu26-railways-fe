@@ -9,10 +9,13 @@ import VoltageWidget from "../../components/home/VoltageWidget";
 import FuelWidget from "../../components/home/FuelWidget";
 import TemperatureWidget from "../../components/home/TemperatureWidget";
 import PressureWidget from "../../components/home/PressureWidget";
+import Map from "../../components/home/Map";
+import LocomotiveMap from "../../components/home/Map/LocomotiveMap";
+import RouteWidget from "../../components/home/Map/RouteWidget";
 
 export default function HomePage() { 
     return (
-        <div className='h-screen bg-[#111112] w-full '>
+        <div className='h-full bg-[#111112] w-full '>
             <Header />
 
             <div className="flex h-full">
@@ -53,6 +56,14 @@ export default function HomePage() {
                         </div>
                     </div>
 
+                    <div className="flex gap-5">
+                        <div className="flex-1">
+                            <LocomotiveMap />
+                        </div>
+                        <div className="flex-1">
+                            <RouteWidget />
+                        </div>
+                    </div>
                 </div>
             
 

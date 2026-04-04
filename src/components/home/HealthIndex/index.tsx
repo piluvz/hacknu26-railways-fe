@@ -37,7 +37,6 @@ export default function HealthIndex() {
             alignItems: "center",
             // gap: 24,
             padding: "26px 30px",
-            height: "100%",
             backgroundColor: "#171719",
             fontSize: 14,
             color: "#fff",

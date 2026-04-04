@@ -17,6 +17,16 @@ const metrics = [
     value: 60,
     status: "warning"
   },
+  {
+    label: "Metric",
+    value: 80,
+    status: "normal"
+  },
+  {
+    label: "Metric",
+    value: 65,
+    status: "warning"
+  },
 ]
 
 export default function HealthIndex() {  
@@ -33,11 +43,12 @@ export default function HealthIndex() {
             color: "#fff",
             borderRight: "1px solid #222223"
         }}>
-            <div style={{ marginBottom: 30, fontWeight: 400, textTransform: "uppercase" }}>Индекс здоровья</div>
+            <div style={{ width: "100%", marginBottom: 30, fontWeight: 400, textTransform: "uppercase" }}>Индекс здоровья</div>
 
             <PieChart />
 
             <span style={{
+              marginTop: 10,
               marginBottom: 45,
               padding: "6px 20px",
               borderRadius: 40,
@@ -50,17 +61,27 @@ export default function HealthIndex() {
             </span>
 
             { metrics.map(metic => 
-                <div>
-                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8, width: "100%", fontWeight: 400 }}>
-                    <span>{ metic.label }</span>
-                    <span>{ metic.value }%</span>
-                  </div>
-                  <ProgressBar 
-                    value={metic.value}
-                    status={metic.status}
-                  />
+              <div style={{ marginBottom: 24 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8, width: "100%", fontWeight: 400 }}>
+                  <span>{ metic.label }</span>
+                  <span>{ metic.value }%</span>
                 </div>
+                <ProgressBar 
+                  value={metic.value}
+                  status={metic.status}
+                />
+              </div>
             )}
+
+            <div style={{
+              borderTop: "1px solid #222223",
+              paddingTop: 24,
+              fontSize: 14,
+              fontWeight: 400,
+              color: "#696969"
+            }}>
+              Формула индекса объясненная
+            </div>
         </div>
     )
 }

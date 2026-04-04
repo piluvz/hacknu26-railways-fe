@@ -5,6 +5,9 @@ import SpeedWidget from "../../components/home/SpeedWidget";
 import BreaksWidget from "../../components/home/BreaksWidget";
 import StatesWidget from "../../components/home/StatesWidget";
 import AlertsPanel from "../../components/home/AlertsPanel";
+import FuelWidget from "../../components/home/FuelWidget";
+import TemperatureWidget from "../../components/home/TemperatureWidget";
+import PressureWidget from "../../components/home/PressureWidget";
 
 export default function HomePage() { 
     return (
@@ -14,30 +17,48 @@ export default function HomePage() {
             <div className="flex h-full">
                 <HealthIndex />
 
-                <div className="flex mx-7 py-6 gap-5 self-start">
-                    <div className="w-[290px]">
-                        <SpeedWidget />
-                    </div>
+                <div className="flex flex-col gap-5 p-5 w-full">
+                    <div className="flex gap-5">
+                        <div className="flex-3">
+                            <SpeedWidget />
+                        </div>
 
-                    <div className="w-[230px] flex flex-col gap-4">
-                        <SmallBarChart/>
-                        <div className="flex-1">
-                            <BreaksWidget />
+                        <div className="flex-2 flex flex-col gap-4">
+                            <SmallBarChart/>
+                            <div className="flex-1">
+                                <BreaksWidget />
+                            </div>
+                        </div>
+
+                        <div className="flex-3">
+                            <StatesWidget />
                         </div>
                     </div>
 
-                    <div className="max-w-[330px]">
-                        <StatesWidget />
+                    <div className="flex gap-5">
+                        <div className="flex-2 flex flex-col gap-4">
+                            <FuelWidget/>
+                            <div className="flex-1">
+                                <FuelWidget />
+                            </div>
+                        </div>
+
+                        <div className="flex-4">
+                            <TemperatureWidget />
+                        </div>
+
+                          <div className="flex-3">
+                            <PressureWidget />
+                        </div>
                     </div>
+
                 </div>
+            
 
                 <div className="ml-auto">
                     <AlertsPanel />
                 </div>
             </div>
-
-            
-
         </div>
     )   
 };

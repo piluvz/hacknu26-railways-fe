@@ -1,5 +1,6 @@
 import Header from "../../components/home/Header";
 import HealthIndex from "../../components/home/HealthIndex";
+import SpeedWidget from "../../components/home/SpeedWidget";
 
 export default function HomePage() { 
     return (
@@ -15,6 +16,7 @@ export default function HomePage() {
             }}>
                 <HealthIndex />
             </div>
+
         </div>
     )   
 };

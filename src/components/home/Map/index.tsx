@@ -1,11 +1,11 @@
-import { LocomotiveMap } from "./LocomotiveMap";
-import RouteWidget from "./RouteWidget";
+// import { LocomotiveMap } from "./LocomotiveMap";
+// import RouteWidget from "./RouteWidget";
 
 export default function Map() {
   return (
     <div className="flex gap-[20px]">
-      <LocomotiveMap />
-      <RouteWidget />
+       {/* <LocomotiveMap />
+       <RouteWidget /> */}
     </div>
   );
 }

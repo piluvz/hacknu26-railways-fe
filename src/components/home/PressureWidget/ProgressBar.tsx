@@ -1,103 +1,43 @@
-import ReactECharts from "echarts-for-react";
+import { useEffect, useState } from "react";
 
-function makeTick(value: number, color: string) {
-  return {
-    type: "rect",
-    left: `${(value / 100) * 100}%`,
-    top: "center",
-    shape: {
-      width: 6,
-      height: 40, // controls tick height
-    },
-    style: {
-      fill: color,
-      borderRadius: 3,
-    },
-    z: 10,
-  };
-}
-
-const ProgressBar = ({ value, status }: { value: number; status: string }) => {
-  const color =
-    status === "normal"
-      ? "#49C86E"
-      : status === "critical"
+export default function ProgressBar({ value, status }: {
+    value: number;
+    status: string;
+}) {
+    const color = status === "normal" 
+        ? "#49C86E"
+        : status === "critical" 
         ? "#E23F3F"
         : "#EABD52";
-  const total = 100;
+    const max = 100;
+    const percentage = (value / max) * 100;
 
-  const warning = 20; // yellow marker
-  const danger = 85; // red marker
+    const [displayPct, setDisplayPct] = useState(0);
+        
+    useEffect(() => {
+        const timer = setTimeout(() => setDisplayPct(percentage), 50);
+        return () => clearTimeout(timer);
+    }, [percentage]);
 
-  const option = {
-    grid: {
-      left: 0,
-      right: 0,
-      top: 0,
-      bottom: 0,
-    },
-    xAxis: {
-      type: "value",
-      max: total,
-      show: false,
-    },
-    yAxis: {
-      type: "category",
-      data: [""],
-      show: false,
-    },
+    return (
+        <div className="relative w-full">
+            <div className="h-2.5 w-full bg-[#242426] rounded-full overflow-hidden">
+            <div
+                className="h-full rounded-left transition-[width] duration-1000 ease-out"
+                style={{ width: `${displayPct}%`, backgroundColor: color }}
+            />
+            </div>
 
-    series: [
-      // Foreground progress
-      {
-        type: "bar",
-        data: [value],
-        barWidth: 20,
-        itemStyle: {
-          color: color,
-          borderRadius: 16,
-        },
+            {/* Максимальная отметка */}
+            <div className="absolute top-[-4px] right-[20%] flex flex-col items-center">
+                <div className="h-5 w-[3px] bg-[#E23F3F] rounded-full" />
+            </div>
 
-        // 🔥 MARKERS
-        // markLine: {
-        //     symbol: "none",
-        //     silent: true,
 
-        //     lineStyle: {
-        //     width: 0, // hide horizontal line
-        //     },
-
-        //     data: [
-        //     {
-        //         xAxis: warning,
-        //         lineStyle: { color: "#F5A623", width: 4 },
-        //         label: { show: false },
-        //     },
-        //     {
-        //         xAxis: danger,
-        //         lineStyle: { color: "#FF4D4F", width: 4 },
-        //         label: { show: false },
-        //     },
-        //     ],
-        // },
-      },
-    ],
-
-    graphic: [makeTick(warning, "#F5A623"), makeTick(danger, "#FF4D4F")],
-  };
-
-  return (
-    <div
-      style={{
-        backgroundColor: "#222223",
-        height: 10,
-        width: "100%",
-        borderRadius: 16,
-      }}
-    >
-      <ReactECharts option={option} style={{ height: 10 }} />
-    </div>
-  );
+            {/*  отметка */}
+            <div className="absolute top-[-4px] left-[20%] flex flex-col items-center">
+                <div className="h-5 w-[3px] bg-[#F7A92E] rounded-full" />
+            </div>
+        </div>
+    );
 };
-
-export default ProgressBar;

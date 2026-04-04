@@ -11,7 +11,6 @@ import HistoryBar from "../../components/home/HistoryBar";
 import FuelWidget from "../../components/home/FuelWidget";
 import TemperatureWidget from "../../components/home/TemperatureWidget";
 import PressureWidget from "../../components/home/PressureWidget";
-import Map from "../../components/home/Map";
 import LocomotiveMap from "../../components/home/Map/LocomotiveMap";
 import RouteWidget from "../../components/home/Map/RouteWidget";
 
@@ -41,13 +40,13 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="flex gap-5">
-            <div className="flex-2 flex flex-col gap-4">
-              <FuelWidget />
-              <div className="flex-1">
-                <FuelWidget />
-              </div>
-            </div>
+                    <div className="flex gap-5">
+                        <div className="flex-3 flex flex-col gap-4">
+                            <FuelWidget/>
+                            <div className="flex-1">
+                                <BreaksWidget />
+                            </div>
+                        </div>
 
             <div className="flex-4">
               <TemperatureWidget />

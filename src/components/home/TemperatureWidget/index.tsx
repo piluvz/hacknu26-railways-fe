@@ -33,9 +33,9 @@ const measures = [
 const norms = measures.map((m) => m.norm);
 
 export default function TemperatureWidget() {
-  return (
-    <div className="p-[20px] bg-[#171719] border-1 border-[#222223] rounded-[16px]">
-      <div className="mb-[10px] uppercase text-[#696969]">Температура</div>
+    return (
+        <div className="p-[20px] bg-[#171719] border-1 border-[#222223] rounded-[16px] h-[340px]">
+            <div className="text-sm mb-[10px] uppercase text-[#696969] tracking-[0.08em]">Температура</div>
 
       <div className="grid grid-cols-2 gap-4 px-[30px]">
         {measures.map((measure) => (
@@ -52,9 +52,9 @@ export default function TemperatureWidget() {
         ))}
       </div>
 
-      <div className="mt-[10px] text-[12px] text-[#696969]">
-        Норма: {norms.join(" · ")}
-      </div>
-    </div>
-  );
+            <div className="mt-[10px] text-[12px] text-[#696969]">
+                Норма: { norms.join(" · ") }
+            </div>
+        </div>
+    )
 }

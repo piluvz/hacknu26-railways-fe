@@ -1,6 +1,6 @@
 import ReactECharts from "echarts-for-react";
 import { ArrowBigUp } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTheme } from "../../context/ThemeContext";
 import { useData } from "../../context/DataContext";
 
@@ -48,14 +48,19 @@ export default function SpeedWidget() {
   const maxSpeed = data.params.speed.max;
   const unit = data.params.speed.unit;
   const [displaySpeed, setDisplaySpeed] = useState(0);
+  const prevSpeedRef = useRef(0);
 
   useEffect(() => {
+    const from = prevSpeedRef.current;
+    const to = speed;
+    prevSpeedRef.current = to;
+
     const duration = 1400;
     const start = performance.now();
     function tick(now: number) {
       const progress = Math.min((now - start) / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
-      setDisplaySpeed(Math.round(eased * speed));
+      setDisplaySpeed(Math.round(from + (to - from) * eased));
       if (progress < 1) requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);

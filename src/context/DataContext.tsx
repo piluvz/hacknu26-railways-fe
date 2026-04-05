@@ -197,13 +197,7 @@ interface TelemetryData {
   health_score: number;
   health_category: "Норма" | "Предупреждение" | "Критично";
   alert_count: number;
-  top_impacts: [
-      { metric: string; status: "норма" | "предупреждение" | "критично"; impact: number; },
-      { metric: string; status: "норма" | "предупреждение" | "критично"; impact: number; },
-      { metric: string; status: "норма" | "предупреждение" | "критично"; impact: number; },
-      { metric: string; status: "норма" | "предупреждение" | "критично"; impact: number; },
-      { metric: string; status: "норма" | "предупреждение" | "критично"; impact: number; }, 
-],
+  top_impacts: { metric: string; status: "normal" | "warning" | "critical"; impact: number; }[],
   params: {
     speed: {
       name: string;
@@ -458,11 +452,11 @@ const MOCK_JSON : TelemetryData = {
   health_category: "Предупреждение",
   alert_count: 0,
   top_impacts: [
-      { metric: "speed", status: "норма", impact: 80},
-      { metric: "speed", status: "критично", impact: 80},
-      { metric: "speed", status: "норма", impact: 20},
-      { metric: "speed", status: "норма", impact: 40},
-      { metric: "speed", status: "предупреждение", impact: 80}, 
+      { metric: "speed", status: "normal", impact: 80},
+      { metric: "speed", status: "critical", impact: 80},
+      { metric: "speed", status: "normal", impact: 20},
+      { metric: "speed", status: "normal", impact: 40},
+      { metric: "speed", status: "warning", impact: 80}, 
   ],
   params: {
     speed: {

@@ -16,10 +16,37 @@ import PressureWidget from "../../components/home/PressureWidget";
 import LocomotiveMap from "../../components/home/Map/LocomotiveMap";
 import RouteWidget from "../../components/home/Map/RouteWidget";
 import CurrentWidget from "../../components/home/CurrentWidget";
+import { useData } from "../../context/DataContext";
+import { useHistory } from "../../context/HistoryContext";
+import { useEffect } from "react";
 
 export default function HomePage() {
   const { c } = useTheme();
-  const { role, selectedTrainId, setSelectedTrainId } = useAuth();
+  const { role, trainId, selectedTrainId, setSelectedTrainId } = useAuth();
+  const { setData } = useData();
+  const { distanceSelected } = useHistory();
+
+  useEffect(() => {
+    if (distanceSelected === null) return;
+    const id = role === "dispatcher" ? selectedTrainId : trainId;
+
+    ( async () => {
+      const response = await fetch(`http://localhost:8000/api/historic/telemetry/${id}?distance=${distanceSelected}`, {
+        method: "GET",
+        headers: {
+          "Accept": "application/json", 
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Authorization": `` 
+        }
+      });
+
+      if (!response.ok) {
+        return;
+      }
+
+      console.log(response);
+    })()
+  }, [ distanceSelected ]);
 
   const DISPATCHER_TRAINS = ["TE33A-L006", "TE33A-L007", "TE33A-L008", "TE33A-L009"];
 

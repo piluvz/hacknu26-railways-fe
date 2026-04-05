@@ -3,6 +3,7 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import { useData } from "../../context/DataContext";
 import { useAuth } from "../../context/AuthContext";
+import { useHistory } from "../../context/HistoryContext";
 
 const DISPATCHER_TRAINS = [
   "TE33A-L006",
@@ -12,7 +13,7 @@ const DISPATCHER_TRAINS = [
 ];
 
 export default function Header() {
-    const status: any = "online";
+    const { distanceSelected } = useHistory();
     const [opacity, setOpacity] = useState(1);
     const { isDark, toggle, c } = useTheme();
     const { data } = useData();
@@ -53,11 +54,11 @@ export default function Header() {
             <div
                 className="absolute flex items-center gap-[10px]"
                 style={{
-                    left: status === "online" ? "42%" : "45%",
-                    color: status === "online" ? "#49C86E" : "#696969",
+                    left: distanceSelected === null ? "42%" : "45%",
+                    color: distanceSelected === null ? "#49C86E" : "#696969",
                 }}
             >
-                {status === "online" ? (
+                {distanceSelected === null ? (
                     <div
                         className="w-[8px] h-[8px] bg-[#49C86E] rounded-[100%] transition-opacity duration-300"
                         style={{ opacity }}
@@ -68,7 +69,7 @@ export default function Header() {
                     </svg>
                 )}
                 <div>
-                    {status === "online" ? "Трансляция в реальном времени" : "Оффлайн"}
+                    {distanceSelected === null ? "Трансляция в реальном времени" : "Оффлайн"}
                 </div>
             </div>
 

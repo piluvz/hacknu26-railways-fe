@@ -59,10 +59,10 @@ const LoginPage: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8000/api/auth/token", {
+      const response = await fetch("/api/auth/token", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ username: formData.username, password: formData.password }),
       });
 
       setIsLoading(false);
@@ -74,9 +74,10 @@ const LoginPage: React.FC = () => {
       }
 
       const data = await response.json();
-      localStorage.setItem("token", data.token);
-      setToken(data.token);
-      const parsedToken = parseToken(data.token);
+      const token = data.access_token ?? data.token;
+      localStorage.setItem("token", token);
+      setToken(token);
+      const parsedToken = parseToken(token);
       setTrainId(parsedToken?.train_id || "");
       setRole(parsedToken?.role || "");
 

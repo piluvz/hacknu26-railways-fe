@@ -19,7 +19,7 @@ const AuthContext = createContext<AuthContextValue>({
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState(() => localStorage.getItem("token") ?? "");
   const [trainId, setTrainId] = useState("");
   const [role, setRole] = useState("");
 

@@ -4,12 +4,9 @@ import {
   TileLayer,
   Polyline,
   Marker,
-  CircleMarker,
-  Popup,
+  CircleMarker
 } from "react-leaflet";
-import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { useEffect } from "react";
 import { useData } from "../../../context/DataContext";
 
 // Custom Marker Icon for Destination
@@ -35,18 +32,18 @@ export default function LocomotiveMap() {
   const { data } = useData();
   const position = [data.route_info.current.latitude, data.route_info.current.longitude ];  //[49.8064, 73.0855];
 
-  const untraveledRoute = [ position, ...data.route_info.stops.filter(s => s.status === "впереди").map(s => [ s.latitude, s.longitude ]) ];
-  const traveledRoute = data.route_info.stops.filter(s => s.status === "пройдено").map(s => [ s.latitude, s.longitude ]);
+  const totalRoute = data.route_info.stops.map(s => [ s.latitude, s.longitude ]);
+  // const untraveledRoute = [ position, ...data.route_info.stops.filter(s => s.status === "впереди").map(s => [ s.latitude, s.longitude ]) ];
+  // const traveledRoute = data.route_info.stops.filter(s => s.status === "пройдено").map(s => [ s.latitude, s.longitude ]);
 
-  const destination = untraveledRoute[untraveledRoute.length - 1];
+  const destination = totalRoute[totalRoute.length - 1];
 
   const traveledOptions = { weight: 6, color: "#3C96F6" };
-  const untraveledOptions = {
-    dashArray: "5, 10",
-    weight: 6,
-    fillColor: "#3C96F6",
-  };
-
+  // const untraveledOptions = {
+  //   dashArray: "5, 10",
+  //   weight: 6,
+  //   fillColor: "#3C96F6",
+  // };
 
   return (
     <MapContainer
@@ -59,11 +56,12 @@ export default function LocomotiveMap() {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Polyline pathOptions={traveledOptions} positions={traveledRoute} />
+      <Polyline pathOptions={traveledOptions} positions={totalRoute} />
+      {/* <Polyline pathOptions={traveledOptions} positions={traveledRoute} />
       <Polyline
         pathOptions={untraveledOptions}
         positions={untraveledRoute}
-      />
+      /> */}
 
       <CircleMarker
         center={position}

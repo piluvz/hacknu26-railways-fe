@@ -60,7 +60,7 @@ export default function HomePage() {
     ws.onmessage = (event: any) => {
       const data = JSON.parse(event.data);
       if(distanceSelected === null) setData(data);
-     // console.log("Message:", data);
+      console.log("Message:", data);
     };
 
     ws.onclose = () => {

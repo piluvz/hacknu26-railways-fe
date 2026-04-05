@@ -662,11 +662,8 @@ const MOCK_JSON : TelemetryData = {
   route_info: {
     route_name: "Астана - Қарағанды - Алматы",
     total_distance_km: 1211,
-    current_position_km: 439.59,
-    current: {
-      latitude: 49.8047,
-      longitude: 73.0884,
-    },
+    current_position_km: 1013.96,
+    current: {latitude: 44.519055, longitude: 76.109778},
     stops: [
       {
         name: "Астана",

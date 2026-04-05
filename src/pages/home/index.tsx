@@ -51,7 +51,8 @@ export default function HomePage() {
   }, [ distanceSelected ]);
 
   useEffect(() => {
-    const ws : any = new WebSocket(`ws://127.0.0.1:8000/api/websocket/ws?train_id=${trainId}`);
+    const id = role === "dispatcher" ? selectedTrainId : trainId;
+    const ws : any = new WebSocket(`ws://127.0.0.1:8000/api/websocket/ws?train_id=${id}`);
 
     ws.onopen = () => {
       console.log("WS connected");
@@ -74,7 +75,7 @@ export default function HomePage() {
     return () => {
       ws.close();
     };
-  }, [trainId]);
+  }, [role, selectedTrainId, trainId, distanceSelected]);
 
   const DISPATCHER_TRAINS = ["TE33A-L006", "TE33A-L007", "TE33A-L008", "TE33A-L009"];
 

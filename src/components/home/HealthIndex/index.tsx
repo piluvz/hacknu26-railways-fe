@@ -16,16 +16,16 @@ export default function HealthIndex() {
   const { data } = useData();
 
   const labelColor =
-    data.health_category === "норма"
+    data.health_category === "Норма"
       ? "#49C86E"
-      :  data.health_category === "критично"
+      :  data.health_category === "Критично"
         ? "#E23F3F"
         : "#EABD52";
 
   const bgColor =
-    data.health_category === "норма"
+    data.health_category === "Норма"
       ? "#49C86E1A"
-      : data.health_category === "критично"
+      : data.health_category === "Критично"
         ? "#E23F3F1A"
         : "#EABD521A";
 

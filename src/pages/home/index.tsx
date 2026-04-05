@@ -77,7 +77,7 @@ export default function HomePage() {
     };
   }, [role, selectedTrainId, trainId, distanceSelected]);
 
-  const DISPATCHER_TRAINS = ["TE33A-L006", "TE33A-L007", "TE33A-L008", "TE33A-L009"];
+  const DISPATCHER_TRAINS = ["KZ8A-L001", "TE33A-L006"];
 
   if (role === "dispatcher" && !selectedTrainId) {
     return (

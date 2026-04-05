@@ -386,21 +386,29 @@ interface TelemetryData {
             longitude: number;
             distance_km: number;
         }
-    ]
-  },
+    ],
+    info: {
+      title: string;
+      recommendation: string;
+      distance_left_km: number;
+      time_left: string;
+      status: "норма" | "предупреждение" | "критично";
+    },
+    time_left: string
+  }
 }
 
 const MOCK_JSON : TelemetryData = {
   time: "2026-04-04T22:49:43+00:00",
   train_id: "TE33A-L006",
-  health: {score: 100, category: "норма"},
+  health: {score: 67, category: "предупреждение"},
   alert_count: 0,
   top_impacts: [
       { metric: "speed", status: "норма", impact: 80},
-      { metric: "speed", status: "норма", impact: 80},
-      { metric: "speed", status: "норма", impact: 80},
-      { metric: "speed", status: "норма", impact: 80},
-      { metric: "speed", status: "норма", impact: 80}, 
+      { metric: "speed", status: "критично", impact: 80},
+      { metric: "speed", status: "норма", impact: 20},
+      { metric: "speed", status: "норма", impact: 40},
+      { metric: "speed", status: "предупреждение", impact: 80}, 
   ],
   params: {
     speed: {
@@ -420,7 +428,7 @@ const MOCK_JSON : TelemetryData = {
       unit: "°C",
       range: "cold",
       value: 18.5,
-      status: "норма",
+      status: "критично",
       range_label: "Холодный воздух",
       alert_message: "",
       recommendation: ""
@@ -443,7 +451,7 @@ const MOCK_JSON : TelemetryData = {
       unit: "°C",
       range: "норма",
       value: 62.4,
-      status: "норма",
+      status: "предупреждение",
       range_label: "Рабочая температура",
       alert_message: "",
       recommendation: ""
@@ -476,7 +484,7 @@ const MOCK_JSON : TelemetryData = {
       unit: "бар",
       range: "норма",
       value: 0.83,
-      status: "норма",
+      status: "предупреждение",
       range_label: "Нормальное давление",
       alert_message: "",
       recommendation: ""
@@ -564,8 +572,8 @@ const MOCK_JSON : TelemetryData = {
     total_distance_km: 1211,
     current_position_km: 439.59,
     current: {
-      latitude: 48.299961,
-      longitude: 73.948538
+      latitude: 49.8047,
+      longitude: 73.0884,
     },
     stops: [
       {
@@ -589,7 +597,15 @@ const MOCK_JSON : TelemetryData = {
         longitude: 76.8512,
         distance_km: 1211
       }
-    ]
+    ],
+    info: {
+      title: "Жилая зона",
+      recommendation: "Снизить скорость",
+      distance_left_km: 30,
+      time_left: "14 мин",
+      status: "предупреждение"
+    },
+    time_left: "1ч 02мин",
   }
 };
 

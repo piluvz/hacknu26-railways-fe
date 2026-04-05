@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "../../../context/ThemeContext";
 
-export default function ProgressBar({ value, status }: {
+export default function ProgressBar({ value, status, max }: {
     value: number;
-    status: string;
+    status: "норма" | "предупреждение" | "критично";
+    max: number;
 }) {
     const { c } = useTheme();
-    const color = status === "normal"
+    const color = status === "норма"
         ? "#49C86E"
-        : status === "critical"
+        : status === "критично"
         ? "#E23F3F"
         : "#EABD52";
-    const max = 100;
+  //  const max = 100;
     const percentage = (value / max) * 100;
 
     const [displayPct, setDisplayPct] = useState(0);

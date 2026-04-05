@@ -78,8 +78,12 @@ const LoginPage: React.FC = () => {
       localStorage.setItem("token", token);
       setToken(token);
       const parsedToken = parseToken(token);
-      setTrainId(parsedToken?.train_id || "");
-      setRole(parsedToken?.role || "");
+      const trainId = parsedToken?.train_id || "";
+      const role = parsedToken?.role || "";
+      setTrainId(trainId);
+      setRole(role);
+      localStorage.setItem("trainId", trainId);
+      localStorage.setItem("role", role);
 
       setSuccessMessage("Вход выполнен успешно! Перенаправление...");
       setTimeout(() => {

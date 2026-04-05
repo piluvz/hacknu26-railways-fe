@@ -16,10 +16,64 @@ import PressureWidget from "../../components/home/PressureWidget";
 import LocomotiveMap from "../../components/home/Map/LocomotiveMap";
 import RouteWidget from "../../components/home/Map/RouteWidget";
 import CurrentWidget from "../../components/home/CurrentWidget";
+import { useData } from "../../context/DataContext";
+import { useHistory } from "../../context/HistoryContext";
+import { useEffect } from "react";
 
 export default function HomePage() {
   const { c } = useTheme();
-  const { role, selectedTrainId, setSelectedTrainId } = useAuth();
+  const { token, role, trainId, selectedTrainId, setSelectedTrainId } = useAuth();
+  const { setData } = useData();
+  const { distanceSelected } = useHistory();
+ //const ws = useWebSocket(trainId);
+
+  useEffect(() => {
+    if (distanceSelected === null) return;
+    const id = role === "dispatcher" ? selectedTrainId : trainId;
+
+    ( async () => {
+      const response = await fetch(`/api/historic/telemetry/${id}?distance=${distanceSelected}`, {
+        method: "GET",
+        headers: {
+          "Accept": "application/json", 
+          "Content-Type": "application/json", 
+          "Authorization": `Bearer ${token}` 
+        }
+      });
+
+      if (!response.ok) {
+        return;
+      }
+
+      console.log(response);
+    })()
+  }, [ distanceSelected ]);
+
+  useEffect(() => {
+    const ws : any = new WebSocket(`ws://127.0.0.1:8000/api/websocket/ws?train_id=${trainId}`);
+
+    ws.onopen = () => {
+      console.log("WS connected");
+    };
+
+    ws.onmessage = (event: any) => {
+      const data = JSON.parse(event.data);
+      setData(data);
+      console.log("Message:", data);
+    };
+
+    ws.onclose = () => {
+      console.log("WS disconnected");
+    };
+
+    ws.onerror = (err: any) => {
+      console.error("WS error:", err);
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, [trainId]);
 
   const DISPATCHER_TRAINS = ["TE33A-L006", "TE33A-L007", "TE33A-L008", "TE33A-L009"];
 

@@ -5,20 +5,20 @@ import { useData } from "../../../context/DataContext";
 export default function PieChart() {
   const { c } = useTheme();
   const { data } = useData();
-  const value = data.health.score;
+  const value = data.health_score;
   const total = 100;
 
   const color =
-    data.health.category === "норма"
+    data.health_category === "норма"
       ? "#49C86E"
-      :  data.health.category === "критично"
+      :  data.health_category === "критично"
         ? "#E23F3F"
         : "#EABD52";
 
   const bgColor =
-    data.health.category === "норма"
+    data.health_category === "норма"
       ? "#49C86E1A"
-      : data.health.category === "критично"
+      : data.health_category === "критично"
         ? "#E23F3F1A"
         : "#EABD521A";
 

@@ -33,10 +33,10 @@ import { useData } from "../../../context/DataContext";
 
 export default function LocomotiveMap() {
   const { data } = useData();
-  const position = [data.route.current.latitude, data.route.current.longitude ];  //[49.8064, 73.0855];
+  const position = [data.route_info.current.latitude, data.route_info.current.longitude ];  //[49.8064, 73.0855];
 
-  const untraveledRoute = [ position, ...data.route.stops.filter(s => s.status === "впереди").map(s => [ s.latitude, s.longitude ]) ];
-  const traveledRoute = data.route.stops.filter(s => s.status === "пройдено").map(s => [ s.latitude, s.longitude ]);
+  const untraveledRoute = [ position, ...data.route_info.stops.filter(s => s.status === "впереди").map(s => [ s.latitude, s.longitude ]) ];
+  const traveledRoute = data.route_info.stops.filter(s => s.status === "пройдено").map(s => [ s.latitude, s.longitude ]);
 
   const destination = untraveledRoute[untraveledRoute.length - 1];
 

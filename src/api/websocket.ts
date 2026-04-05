@@ -1,17 +1,18 @@
 import { useEffect, useRef } from "react";
 
-export default function useWebSocket(trainId) {
+export default function useWebSocket(trainId: string) {
   const wsRef = useRef(null);
 
   useEffect(() => {
-    const ws = new WebSocket(`ws://localhost:8000/ws/${trainId}`);
+    console.log("connecting...");
+    const ws : any = new WebSocket(`ws://127.0.0.1:8000/api/websocket/ws?train_id=${trainId}`);
     wsRef.current = ws;
 
     ws.onopen = () => {
       console.log("WS connected");
     };
 
-    ws.onmessage = (event) => {
+    ws.onmessage = (event: any) => {
       const data = JSON.parse(event.data);
       console.log("Message:", data);
     };
@@ -20,7 +21,7 @@ export default function useWebSocket(trainId) {
       console.log("WS disconnected");
     };
 
-    ws.onerror = (err) => {
+    ws.onerror = (err: any) => {
       console.error("WS error:", err);
     };
 

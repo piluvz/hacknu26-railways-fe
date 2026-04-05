@@ -194,7 +194,8 @@ import { createContext, useContext, useState, ReactNode } from "react";
 interface TelemetryData {
   time: string;
   train_id: string;
-  health: { score: number; category: "норма" | "предупреждение" | "критично"; },
+  health_score: number;
+  health_category: "норма" | "предупреждение" | "критично";
   alert_count: number;
   top_impacts: [
       { metric: string; status: "норма" | "предупреждение" | "критично"; impact: number; },
@@ -397,7 +398,7 @@ interface TelemetryData {
       }[];
     }
   },
-  route: {
+  route_info: {
     route_name: string;
     total_distance_km: number;
     current_position_km: number;
@@ -442,7 +443,8 @@ interface TelemetryData {
 const MOCK_JSON : TelemetryData = {
   time: "2026-04-04T22:49:43+00:00",
   train_id: "TE33A-L006",
-  health: {score: 67, category: "предупреждение"},
+  health_score: 67,
+  health_category: "предупреждение",
   alert_count: 0,
   top_impacts: [
       { metric: "speed", status: "норма", impact: 80},
@@ -634,7 +636,7 @@ const MOCK_JSON : TelemetryData = {
       ]
     }
   },
-  route: {
+  route_info: {
     route_name: "Астана - Қарағанды - Алматы",
     total_distance_km: 1211,
     current_position_km: 439.59,

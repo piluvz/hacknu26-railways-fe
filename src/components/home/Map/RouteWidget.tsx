@@ -13,17 +13,17 @@ import { useTheme } from "../../../context/ThemeContext";
 export default function RouteWidget() {
     const { c } = useTheme();
     const { data } = useData();
-    const max = data.route.total_distance_km;
+    const max = data.route_info.total_distance_km;
 
-    const currentDist = data.route.current_position_km;
-    const distanceLeft = data.route.total_distance_km - currentDist;
+    const currentDist = data.route_info.current_position_km;
+    const distanceLeft = data.route_info.total_distance_km - currentDist;
     const displayPerc =currentDist * 100 / max;
-    const nextStation = data.route.stops.filter(s => s.status === "впереди")[0];
+    const nextStation = data.route_info.stops.filter(s => s.status === "впереди")[0];
 
     const infoColor =
-    data.route.info.status === "норма"
+    data.route_info.info.status === "норма"
       ? "#49C86E"
-      :  data.route.info.status === "критично"
+      :  data.route_info.info.status === "критично"
         ? "#E23F3F"
         : "#EABD52";
     
@@ -38,10 +38,10 @@ export default function RouteWidget() {
             </div>
 
             <div className="text-[14px]" style={{ color: c.text }}>
-                <span className="inline-block mr-[14px]">{ data.route.info.title }</span>
-                <span style={{ color: c.textMuted }}>через { data.route.info.distance_left_km } км · ~{ data.route.info.time_left }</span>
+                <span className="inline-block mr-[14px]">{ data.route_info.info.title }</span>
+                <span style={{ color: c.textMuted }}>через { data.route_info.info.distance_left_km } км · ~{ data.route_info.info.time_left }</span>
             </div>
-            <div className="text-[14px] font-bold" style={{ color: infoColor }}>{ data.route.info.recommendation }</div>
+            <div className="text-[14px] font-bold" style={{ color: infoColor }}>{ data.route_info.info.recommendation }</div>
 
             <div className="my-[15px]" style={{ borderBottom: `1px solid ${c.border}` }} />
 
@@ -49,7 +49,7 @@ export default function RouteWidget() {
 
             <div className="text-[14px]" style={{ color: c.text }}>
                 <span className="inline-block mr-[14px]">{ nextStation.name }</span>
-                <span style={{ color: c.textMuted }}>через { Math.round(distanceLeft) } км · ~{ data.route.time_left }</span>
+                <span style={{ color: c.textMuted }}>через { Math.round(distanceLeft) } км · ~{ data.route_info.time_left }</span>
             </div>
 
             <div className="my-[15px]" style={{ borderBottom: `1px solid ${c.border}` }} />
@@ -63,10 +63,10 @@ export default function RouteWidget() {
                         />
                     </div>
 
-                    {data.route.stops.map((station, index) => {
+                    {data.route_info.stops.map((station, index) => {
                         const stationPerc = station.distance_km * 100 / max;
                         const alignItems = index === 0 ? "flex-start"
-                            : index === data.route.stops.length - 1 ? "flex-end"
+                            : index === data.route_info.stops.length - 1 ? "flex-end"
                             : "center";
 
                         return (

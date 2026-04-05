@@ -24,8 +24,8 @@ const AuthContext = createContext<AuthContextValue>({
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState(() => localStorage.getItem("token") ?? "");
-  const [trainId, setTrainId] = useState("");
-  const [role, setRole] = useState("");
+  const [trainId, setTrainId] = useState(() => localStorage.getItem("trainId") ?? "");
+  const [role, setRole] = useState(() => localStorage.getItem("role") ?? "");
   const [selectedTrainId, setSelectedTrainId] = useState("");
 
   return (

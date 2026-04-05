@@ -3,9 +3,11 @@ import { Radio, Download, Loader } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { useHistory } from "../../context/HistoryContext";
+import { useData } from "../../context/DataContext";
 
 // TODO: Replace with data from backend
-const KM_POINTS = [120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240];
+// const KM_POINTS = [120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240];
 
 const GOLD = "#EABD52";
 
@@ -34,6 +36,14 @@ function DotTooltip({ label }: { label: string }) {
             />
         </div>
     );
+}
+
+function generateSteps(min: number, max:number, count = 12) {
+  const step = (max - min) / (count - 1);
+
+  return Array.from({ length: count }, (_, i) =>
+    Math.round(min + step * i)
+  );
 }
 
 async function exportToPdf() {
@@ -87,8 +97,14 @@ async function exportToPdf() {
 
 export default function HistoryBar() {
     const { c } = useTheme();
+    const { data } = useData();
+    const { distanceSelected, setDistanceSelected } = useHistory();
     const [hovered, setHovered] = useState<number | "now" | null>(null);
     const [exporting, setExporting] = useState(false);
+    const routeMin = data.route_info.stops[0].distance_km;
+    const routeMax = data.route_info.stops[data.route_info.stops.length - 1].distance_km;
+    const kmPoints = generateSteps(routeMin, routeMax);
+   // console.log(kmPoints);
 
     async function handleExport() {
         setExporting(true);
@@ -117,12 +133,13 @@ export default function HistoryBar() {
                     />
 
                     <div className="relative flex justify-between w-full">
-                        {KM_POINTS.map((km) => (
+                        {kmPoints.map((km) => (
                             <div
                                 key={km}
                                 className="relative flex flex-col items-center cursor-pointer"
                                 onMouseEnter={() => setHovered(km)}
                                 onMouseLeave={() => setHovered(null)}
+                                onClick={() => setDistanceSelected(km) }
                             >
                                 {hovered === km && <DotTooltip label={`${km} км`} />}
                                 <div
@@ -130,10 +147,14 @@ export default function HistoryBar() {
                                     style={{
                                         backgroundColor: GOLD,
                                         transform: hovered === km ? "scale(1.4)" : "scale(1)",
-                                        boxShadow: hovered === km ? `0 0 8px ${GOLD}BB` : "none",
+                                        boxShadow: (hovered === km || distanceSelected === km) ? `0 0 8px ${GOLD}BB` : "none",
                                     }}
                                 />
-                                <span className="text-[10px] whitespace-nowrap mt-1.5" style={{ color: c.textMuted }}>
+                                <span className="text-[10px] whitespace-nowrap mt-1.5"
+                                    style={{
+                                        color: distanceSelected === km ? "#44BD68" : c.textMuted
+                                    }}
+                                >
                                     {km} км
                                 </span>
                             </div>
@@ -144,19 +165,24 @@ export default function HistoryBar() {
                             className="relative flex flex-col items-center cursor-pointer"
                             onMouseEnter={() => setHovered("now")}
                             onMouseLeave={() => setHovered(null)}
+                            onClick={() => setDistanceSelected(null)}
                         >
                             {hovered === "now" && <DotTooltip label="Текущая позиция" />}
                             <div
                                 className="w-3.5 h-3.5 rounded-full z-10 transition-transform duration-150"
                                 style={{
                                     backgroundColor: GOLD,
-                                    boxShadow: hovered === "now"
+                                    boxShadow: (hovered === "now" || distanceSelected === null)
                                         ? `0 0 14px ${GOLD}CC`
                                         : `0 0 10px ${GOLD}AA`,
                                     transform: hovered === "now" ? "scale(1.4)" : "scale(1)",
                                 }}
                             />
-                            <span className="text-[10px] font-medium whitespace-nowrap mt-1.5 text-[#44BD68]">
+                            <span className="text-[10px] font-medium whitespace-nowrap mt-1.5"
+                                style={{
+                                    color: distanceSelected === null ? "#44BD68": c.textMuted 
+                                }}
+                            >
                                 Сейчас
                             </span>
                         </div>
@@ -167,8 +193,9 @@ export default function HistoryBar() {
             {/* Buttons */}
             <div className="flex flex-col gap-2 w-fit items-end">
                 <button
-                    className="w-fit flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-white transition-opacity hover:opacity-90 whitespace-nowrap"
+                    className="w-fit flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-white transition-opacity hover:opacity-90 whitespace-nowrap cursor-pointer"
                     style={{ backgroundColor: "#49C86E" }}
+                    onClick={() => setDistanceSelected(null)}
                 >
                     <Radio size={12} />
                     Вернуться на трансляцию

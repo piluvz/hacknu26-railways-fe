@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "../../../context/ThemeContext";
 
-const ProgressBar = ({ value, status }: { value: number; status: string }) => {
+const ProgressBar = ({ value, status }: { value: number; status: "норма" | "предупреждение" | "критично" }) => {
   const { c } = useTheme();
   const color =
-    status === "normal"
+    status === "норма"
       ? "#49C86E"
-      : status === "critical"
+      : status === "критично"
         ? "#E23F3F"
         : "#EABD52";
   const max = 100;

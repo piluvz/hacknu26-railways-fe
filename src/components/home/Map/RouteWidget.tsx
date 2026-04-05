@@ -1,19 +1,32 @@
+import { useData } from "../../../context/DataContext";
 import { useTheme } from "../../../context/ThemeContext";
 
-const STATIONS = [
-    { name: "Станция 1", distance: 0 },
-    { name: "Станция 2", distance: 250 },
-    { name: "Станция 3", distance: 530 },
-    { name: "Караганда", distance: 701 },
-    { name: "Станция 4", distance: 930 },
-    { name: "Станция 5", distance: 1243 }
-];
+// const STATIONS = [
+//     { name: "Станция 1", distance: 0 },
+//     { name: "Станция 2", distance: 250 },
+//     { name: "Станция 3", distance: 530 },
+//     { name: "Караганда", distance: 701 },
+//     { name: "Станция 4", distance: 930 },
+//     { name: "Станция 5", distance: 1243 }
+// ];
 
 export default function RouteWidget() {
     const { c } = useTheme();
-    const currentIndex = 3;
-    const max = STATIONS[STATIONS.length - 1].distance;
-    const displayPerc = STATIONS[currentIndex].distance * 100 / max;
+    const { data } = useData();
+    const max = data.route.total_distance_km;
+
+    const currentDist = data.route.current_position_km;
+    const distanceLeft = data.route.total_distance_km - currentDist;
+    const displayPerc =currentDist * 100 / max;
+    const nextStation = data.route.stops.filter(s => s.status === "впереди")[0];
+
+    const infoColor =
+    data.route.info.status === "норма"
+      ? "#49C86E"
+      :  data.route.info.status === "критично"
+        ? "#E23F3F"
+        : "#EABD52";
+    
 
     return (
         <div
@@ -25,18 +38,18 @@ export default function RouteWidget() {
             </div>
 
             <div className="text-[14px]" style={{ color: c.text }}>
-                <span className="inline-block mr-[14px]">Жилая зона</span>
-                <span style={{ color: c.textMuted }}>через 30 км · ~14мин</span>
+                <span className="inline-block mr-[14px]">{ data.route.info.title }</span>
+                <span style={{ color: c.textMuted }}>через { data.route.info.distance_left_km } км · ~{ data.route.info.time_left }</span>
             </div>
-            <div className="text-[14px] font-bold text-[#EABD52]">Снизить скорость</div>
+            <div className="text-[14px] font-bold" style={{ color: infoColor }}>{ data.route.info.recommendation }</div>
 
             <div className="my-[15px]" style={{ borderBottom: `1px solid ${c.border}` }} />
 
             <div className="text-[10px]" style={{ color: c.textMuted }}>Следующая остановка:</div>
 
             <div className="text-[14px]" style={{ color: c.text }}>
-                <span className="inline-block mr-[14px]">Станция 3</span>
-                <span style={{ color: c.textMuted }}>через 119 км · ~1ч 02мин</span>
+                <span className="inline-block mr-[14px]">{ nextStation.name }</span>
+                <span style={{ color: c.textMuted }}>через { Math.round(distanceLeft) } км · ~{ data.route.time_left }</span>
             </div>
 
             <div className="my-[15px]" style={{ borderBottom: `1px solid ${c.border}` }} />
@@ -50,10 +63,10 @@ export default function RouteWidget() {
                         />
                     </div>
 
-                    {STATIONS.map((station, index) => {
-                        const stationPerc = station.distance * 100 / max;
+                    {data.route.stops.map((station, index) => {
+                        const stationPerc = station.distance_km * 100 / max;
                         const alignItems = index === 0 ? "flex-start"
-                            : index === STATIONS.length - 1 ? "flex-end"
+                            : index === data.route.stops.length - 1 ? "flex-end"
                             : "center";
 
                         return (
@@ -63,21 +76,21 @@ export default function RouteWidget() {
                                 style={{ alignItems, left: `calc(${stationPerc}% - 8px)` }}
                             >
                                 <div className="text-[#696969] text-[10px] whitespace-nowrap">
-                                    {station.distance} км
+                                    {station.distance_km} км
                                 </div>
 
                                 <div
                                     className="w-[16px] h-[16px] rounded-[100%]"
                                     style={{
-                                        backgroundColor: index > currentIndex ? c.progressTrack : "#3C96F6"
+                                        backgroundColor: station.status === "впереди" ? c.progressTrack : "#3C96F6"
                                     }}
                                 />
 
                                 <div
                                     className="text-[8px] whitespace-nowrap"
                                     style={{
-                                        color: index === currentIndex ? c.text
-                                            : index > currentIndex ? c.textMuted
+                                        color: station.distance_km === currentDist ? c.text
+                                            : station.status === "впереди" ? c.textMuted
                                             : "#3C96F6"
                                     }}
                                 >

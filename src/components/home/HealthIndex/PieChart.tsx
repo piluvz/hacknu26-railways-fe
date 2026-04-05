@@ -1,10 +1,26 @@
 import ReactECharts from "echarts-for-react";
 import { useTheme } from "../../../context/ThemeContext";
+import { useData } from "../../../context/DataContext";
 
 export default function PieChart() {
   const { c } = useTheme();
-  const value = 89;
+  const { data } = useData();
+  const value = data.health.score;
   const total = 100;
+
+  const color =
+    data.health.category === "норма"
+      ? "#49C86E"
+      :  data.health.category === "критично"
+        ? "#E23F3F"
+        : "#EABD52";
+
+  const bgColor =
+    data.health.category === "норма"
+      ? "#49C86E1A"
+      : data.health.category === "критично"
+        ? "#E23F3F1A"
+        : "#EABD521A";
 
   const option = {
     series: [
@@ -17,7 +33,7 @@ export default function PieChart() {
           { value: value, name: "Completed" },
           { value: total - value, name: "Remaining" },
         ],
-        color: ["#49C86E", "transparent"],
+        color: [color, "transparent"],
       },
     ],
     graphic: {
@@ -28,7 +44,7 @@ export default function PieChart() {
         {
           type: "circle",
           shape: { r: 52.5 },
-          style: { fill: "#44BD681A" },
+          style: { fill: bgColor },
           left: "center",
           top: "center",
         },

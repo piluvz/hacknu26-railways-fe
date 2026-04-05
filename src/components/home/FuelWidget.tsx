@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "../../context/ThemeContext";
+import { useData } from "../../context/DataContext";
 
 export default function FuelWidget() {
   const { c } = useTheme();
-  const value = 1240;
-  const max = 2000;
+  const { data } = useData();
+  const value = data.params.fuel_liters.value;
+  const max = data.params.fuel_liters.max;
   const percentage = (value / max) * 100;
   const [displayPct, setDisplayPct] = useState(0);
 
@@ -28,7 +30,7 @@ export default function FuelWidget() {
       </div>
 
       <div className="text-[10px] mb-3" style={{ color: c.textMuted }}>
-        240 кВт·ч из 2 000 кВт·ч
+        { value } кВт·ч из { max } кВт·ч
       </div>
 
       {/* Прогресс-бар */}

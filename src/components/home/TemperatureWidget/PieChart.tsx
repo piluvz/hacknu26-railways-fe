@@ -7,19 +7,20 @@ export default function PieChart({
 }: {
   value: number;
   unit: string;
-  status: string;
+  status: "норма" | "предупреждение" | "критично";
 }) {
   const total = 100;
+  const valueRounded = Math.round(value);
   const color =
-    status === "normal"
+    status === "норма"
       ? "#49C86E"
-      : status === "critical"
+      : status === "критично"
         ? "#E23F3F"
         : "#EABD52";
   const bgColor =
-    status === "normal"
+    status === "норма"
       ? "#49C86E1A"
-      : status === "critical"
+      : status === "критично"
         ? "#E23F3F1A"
         : "#EABD521A";
 
@@ -57,7 +58,7 @@ export default function PieChart({
         {
           type: "text",
           style: {
-            text: `${value}${unit}`,
+            text: `${valueRounded}${unit}`,
             fontSize: 20,
             fontWeight: 600,
             fill: color,
@@ -73,7 +74,7 @@ export default function PieChart({
     <div className="relative h-[90px]">
       <ReactECharts option={option} style={{ height: 90 }} />
 
-      {status === "critical" && (
+      {status === "критично" && (
         <div className="absolute top-[0px] right-[15px]">
           <svg
             width="24"

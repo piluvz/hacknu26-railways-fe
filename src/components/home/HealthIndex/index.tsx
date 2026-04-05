@@ -1,17 +1,33 @@
 import ProgressBar from "./ProgressBar";
 import PieChart from "./PieChart";
 import { useTheme } from "../../../context/ThemeContext";
+import { useData } from "../../../context/DataContext";
 
-const metrics = [
-  { label: "Metric", value: 80, status: "normal" },
-  { label: "Metric", value: 20, status: "critical" },
-  { label: "Metric", value: 60, status: "warning" },
-  { label: "Metric", value: 80, status: "normal" },
-  { label: "Metric", value: 65, status: "warning" },
-];
+// const metrics = [
+//   { label: "Metric", value: 80, status: "normal" },
+//   { label: "Metric", value: 20, status: "critical" },
+//   { label: "Metric", value: 60, status: "warning" },
+//   { label: "Metric", value: 80, status: "normal" },
+//   { label: "Metric", value: 65, status: "warning" },
+// ];
 
 export default function HealthIndex() {
   const { c } = useTheme();
+  const { data } = useData();
+
+  const labelColor =
+    data.health.category === "норма"
+      ? "#49C86E"
+      :  data.health.category === "критично"
+        ? "#E23F3F"
+        : "#EABD52";
+
+  const bgColor =
+    data.health.category === "норма"
+      ? "#49C86E1A"
+      : data.health.category === "критично"
+        ? "#E23F3F1A"
+        : "#EABD521A";
 
   return (
     <div
@@ -46,16 +62,17 @@ export default function HealthIndex() {
           marginBottom: 45,
           padding: "6px 20px",
           borderRadius: 40,
-          backgroundColor: "#49C86E1A",
-          border: "1px solid #49C86E",
-          color: "#49C86E",
+          backgroundColor: bgColor,
+          border: `1px solid ${labelColor}`,
+          color: labelColor,
           textAlign: "center",
+          textTransform: "capitalize"
         }}
       >
-        Норма
+        { data.health.category }
       </span>
 
-      {metrics.map((metric, i) => (
+      {data.top_impacts.map((metric, i) => (
         <div key={i} style={{ marginBottom: 24 }}>
           <div
             style={{
@@ -64,12 +81,13 @@ export default function HealthIndex() {
               marginBottom: 8,
               width: "100%",
               fontWeight: 400,
+              textTransform: "capitalize"
             }}
           >
-            <span>{metric.label}</span>
-            <span>{metric.value}%</span>
+            <span>{metric.metric}</span>
+            <span>{metric.impact}%</span>
           </div>
-          <ProgressBar value={metric.value} status={metric.status} />
+          <ProgressBar value={metric.impact} status={metric.status} />
         </div>
       ))}
 

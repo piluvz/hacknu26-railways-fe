@@ -1,6 +1,7 @@
 import Header from "../../components/home/Header";
 import HealthIndex from "../../components/home/HealthIndex";
 import { useTheme } from "../../context/ThemeContext";
+import { useAuth } from "../../context/AuthContext";
 import SmallBarChart from "../../components/home/SmallBarChart";
 import SpeedWidget from "../../components/home/SpeedWidget";
 import BreaksWidget from "../../components/home/BreaksWidget";
@@ -18,6 +19,30 @@ import CurrentWidget from "../../components/home/CurrentWidget";
 
 export default function HomePage() {
   const { c } = useTheme();
+  const { role, selectedTrainId, setSelectedTrainId } = useAuth();
+
+  const DISPATCHER_TRAINS = ["TE33A-L006", "TE33A-L007", "TE33A-L008", "TE33A-L009"];
+
+  if (role === "dispatcher" && !selectedTrainId) {
+    return (
+      <div className="h-screen w-full flex flex-col items-center justify-center gap-6" style={{ backgroundColor: c.pageBg, color: c.text }}>
+        <div className="text-3xl font-bold">Выберите локомотив</div>
+        <p className="text-sm opacity-50">Для просмотра данных выберите локомотив из списка</p>
+        <select
+          value={selectedTrainId}
+          onChange={(e) => setSelectedTrainId(e.target.value)}
+          className="border rounded-xl px-6 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-600 cursor-pointer min-w-[240px]"
+          style={{ borderColor: c.border, color: c.text, backgroundColor: c.widgetBg }}
+        >
+          <option value="" disabled>Выбрать локомотив</option>
+          {DISPATCHER_TRAINS.map((id) => (
+            <option key={id} value={id}>{id}</option>
+          ))}
+        </select>
+      </div>
+    );
+  }
+
   return (
     <div className="h-screen w-full flex flex-col overflow-hidden" style={{ backgroundColor: c.pageBg }}>
       <Header />

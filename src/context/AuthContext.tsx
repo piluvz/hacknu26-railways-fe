@@ -7,6 +7,8 @@ interface AuthContextValue {
   setTrainId: React.Dispatch<React.SetStateAction<string>>;
   role: string;
   setRole: React.Dispatch<React.SetStateAction<string>>;
+  selectedTrainId: string;
+  setSelectedTrainId: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const AuthContext = createContext<AuthContextValue>({
@@ -16,15 +18,18 @@ const AuthContext = createContext<AuthContextValue>({
   setTrainId: () => {},
   role: "",
   setRole: () => {},
+  selectedTrainId: "",
+  setSelectedTrainId: () => {},
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState(() => localStorage.getItem("token") ?? "");
   const [trainId, setTrainId] = useState("");
   const [role, setRole] = useState("");
+  const [selectedTrainId, setSelectedTrainId] = useState("");
 
   return (
-    <AuthContext.Provider value={{ token, setToken, trainId, setTrainId, role, setRole }}>
+    <AuthContext.Provider value={{ token, setToken, trainId, setTrainId, role, setRole, selectedTrainId, setSelectedTrainId }}>
       {children}
     </AuthContext.Provider>
   );

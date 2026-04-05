@@ -2,12 +2,21 @@ import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import { useData } from "../../context/DataContext";
+import { useAuth } from "../../context/AuthContext";
+
+const DISPATCHER_TRAINS = [
+  "TE33A-L006",
+  "TE33A-L007",
+  "TE33A-L008",
+  "TE33A-L009",
+];
 
 export default function Header() {
     const status: any = "online";
     const [opacity, setOpacity] = useState(1);
     const { isDark, toggle, c } = useTheme();
     const { data } = useData();
+    const { role, selectedTrainId, setSelectedTrainId } = useAuth();
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -22,14 +31,24 @@ export default function Header() {
             style={{ backgroundColor: c.widgetBg, color: c.text, borderColor: c.border }}
         >
             <div className="flex items-center">
-                { data.train_id }
-                {/* <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12.1 13.1C12.6523 13.1 13.1 12.6523 13.1 12.1C13.1 11.5477 12.6523 11.1 12.1 11.1C11.5477 11.1 11.1 11.5477 11.1 12.1C11.1 12.6523 11.5477 13.1 12.1 13.1Z" stroke={c.text} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                1234 */}
+                {role === "dispatcher" ? (
+                    <select
+                        value={selectedTrainId}
+                        onChange={(e) => setSelectedTrainId(e.target.value)}
+                        className="bg-transparent border rounded-lg px-3 py-1 text-sm cursor-pointer outline-none"
+                        style={{ borderColor: c.border, color: c.text, backgroundColor: c.widgetBg }}
+                    >
+                        <option value="" disabled>Выбрать локомотив</option>
+                        {DISPATCHER_TRAINS.map((id) => (
+                            <option key={id} value={id}>{id}</option>
+                        ))}
+                    </select>
+                ) : (
+                    data.train_id
+                )}
             </div>
 
-            <div className="font-semibold mr-auto">Локомотив { data.route.route_name } </div>
+            <div className="font-semibold mr-auto">Локомотив {data.route.route_name}</div>
 
             <div
                 className="absolute flex items-center gap-[10px]"

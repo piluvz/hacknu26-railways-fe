@@ -69,7 +69,7 @@ const LoginPage: React.FC = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        setError(errorData.message || "Invalid credentials. Please try again.");
+        setError(errorData.message || "Неверное имя пользователя или пароль.");
         return;
       }
 
@@ -81,13 +81,13 @@ const LoginPage: React.FC = () => {
       setTrainId(parsedToken?.train_id || "");
       setRole(parsedToken?.role || "");
 
-      setSuccessMessage("Login successful! Redirecting...");
+      setSuccessMessage("Вход выполнен успешно! Перенаправление...");
       setTimeout(() => {
         navigate("/");
       }, 2000);
     } catch (err) {
       setIsLoading(false);
-      setError("Connection failed");
+      setError("Ошибка подключения к серверу.");
       console.error(err);
     }
   };
@@ -119,15 +119,15 @@ const LoginPage: React.FC = () => {
         <div className="space-y-5">
           <div>
             <label
-              htmlFor="email"
+              htmlFor="username"
               className="block text-sm font-semibold text-gray-700"
             >
               Имя пользователя
             </label>
             <input
               id="username"
-              type="username"
-              placeholder="username"
+              type="text"
+              placeholder="Имя пользователя"
               value={formData.username}
               onChange={handleChange}
               required

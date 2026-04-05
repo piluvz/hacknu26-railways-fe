@@ -1,5 +1,5 @@
 import ReactECharts from "echarts-for-react";
-import { ArrowBigUp } from "lucide-react";
+import { ArrowBigUp, ArrowBigDown } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useTheme } from "../../context/ThemeContext";
 import { useData } from "../../context/DataContext";
@@ -48,11 +48,13 @@ export default function SpeedWidget() {
   const maxSpeed = data.params.speed.max;
   const unit = data.params.speed.unit;
   const [displaySpeed, setDisplaySpeed] = useState(0);
+  const [trend, setTrend] = useState<"up" | "down" | "stable">("stable");
   const prevSpeedRef = useRef(0);
 
   useEffect(() => {
     const from = prevSpeedRef.current;
     const to = speed;
+    if (from !== 0) setTrend(to > from ? "up" : to < from ? "down" : "stable");
     prevSpeedRef.current = to;
 
     const duration = 1400;
@@ -130,9 +132,11 @@ export default function SpeedWidget() {
       <div className="flex justify-between text-sm" style={{ color: c.textMuted }}>
         <span className="uppercase tracking-[0.08em]">Скорость</span>
         <div className="flex items-center justify-center gap-1">
-          <ArrowBigUp size={13} color="#EABD52" />
+          {trend === "down"
+            ? <ArrowBigDown size={13} color="#EABD52" />
+            : <ArrowBigUp size={13} color="#EABD52" />}
           <span className="text-xs tracking-[0.08em] text-[#EABD52] leading-none">
-            растет
+            {trend === "down" ? "снижается" : trend === "up" ? "растет" : "стабильно"}
           </span>
         </div>
       </div>

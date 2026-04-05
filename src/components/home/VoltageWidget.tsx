@@ -1,14 +1,11 @@
 import ReactECharts from "echarts-for-react";
-import { ArrowBigUp } from "lucide-react";
+import { ArrowBigUp, ArrowBigDown } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { useTheme } from "../../context/ThemeContext";
 import { useData } from "../../context/DataContext";
 
-// TODO: Replace with data from backend (pantograph_voltage field)
-
-const DATA_POINTS = [
-  23.8, 24.2, 24.0, 24.6, 24.1, 23.7, 23.9, 24.0, 23.6, 24.1, 24.3, 24.0, 23.8,
-  24.1, 24.3, 24.5,
-];
+const MAX_POINTS = 20;
+const BASE_URL = "http://127.0.0.1:8000";
 
 function statusStyle(status: string): { color: string; bg: string } {
   if (status === "Критично")
@@ -47,31 +44,80 @@ export default function VoltageWidget() {
     label: "Нет данных"
   };
 
+  const metricKey = params?.pantograph_voltage ? "pantograph_voltage" : "temp_oil";
+  const trainId = data?.train_id;
+
+  // history: array of { x: number, y: number } with monotonically growing x
+  const [history, setHistory] = useState<{ x: number; y: number }[]>([]);
+  const counterRef = useRef(0);
+  const prevValueRef = useRef<number | null>(null);
+  const loadedRef = useRef(false);
+
+  // Initial fetch of historical data
+  useEffect(() => {
+    if (!trainId) return;
+    fetch(`${BASE_URL}/api/historic/telemetry/${trainId}/metrics/${metricKey}`)
+      .then(res => res.json())
+      .then(raw => {
+        const values: number[] = Array.isArray(raw)
+          ? raw
+              .map((item: any) => (typeof item === "number" ? item : item.value))
+              .filter((v: any) => typeof v === "number" && isFinite(v))
+          : [];
+        const sliced = values.slice(-MAX_POINTS);
+        counterRef.current = sliced.length;
+        loadedRef.current = true;
+        setHistory(sliced.map((y, i) => ({ x: i, y })));
+      })
+      .catch(() => {
+        loadedRef.current = true;
+      });
+  }, [trainId, metricKey]);
+
+  // Slide in new point on each websocket update (only after history is loaded)
+  useEffect(() => {
+    const v = currentParam.value;
+    if (!loadedRef.current || v == null || prevValueRef.current === v) return;
+    prevValueRef.current = v;
+    const idx = ++counterRef.current;
+    setHistory(prev => {
+      const next = [...prev, { x: idx, y: v }];
+      return next.length > MAX_POINTS ? next.slice(next.length - MAX_POINTS) : next;
+    });
+  }, [currentParam.value]);
+
+  const trend = history.length >= 2
+    ? history[history.length - 1].y >= history[history.length - 2].y ? "up" : "down"
+    : "stable";
+
+  const xMin = history.length > 0 ? history[0].x : 0;
+  const xMax = history.length > 0 ? history[history.length - 1].x : MAX_POINTS - 1;
+
   const option = {
     backgroundColor: "transparent",
     grid: { left: 0, right: 0, top: 8, bottom: 0 },
     xAxis: {
-      type: "category",
-      data: DATA_POINTS.map((_, i) => i),
+      type: "value" as const,
+      min: xMin,
+      max: xMax,
       axisLine: { show: false },
       axisTick: { show: false },
       axisLabel: { show: false },
       splitLine: { show: false },
-      boundaryGap: false,
     },
     yAxis: {
-      type: "value",
+      type: "value" as const,
       axisLine: { show: false },
       axisTick: { show: false },
       axisLabel: { show: false },
       splitLine: { show: false },
-      min: (v: { min: number }) => +(v.min - 0.4).toFixed(1),
-      max: (v: { max: number }) => +(v.max + 0.4).toFixed(1),
+      min: currentParam.min ?? "dataMin",
+      max: currentParam.max ?? "dataMax",
     },
     series: [
       {
         type: "line",
-        data: DATA_POINTS,
+        data: history.map(p => [p.x, p.y]),
         smooth: false,
         symbol: "circle",
         symbolSize: 7,
@@ -113,12 +159,14 @@ export default function VoltageWidget() {
       textStyle: { color: c.text, fontSize: 12 },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       formatter: (params: any) =>
-        `<span style="font-weight:600">${params[0].value} кВ</span>`,
+        `<span style="font-weight:600">${params[0].value[1]} ${currentParam.unit}</span>`,
     },
     dataZoom: [{ type: "inside", filterMode: "none" }],
     animation: true,
-    animationDuration: 1200,
+    animationDuration: 600,
     animationEasing: "cubicOut" as const,
+    animationDurationUpdate: 800,
+    animationEasingUpdate: "cubicInOut" as const,
   };
 
   return (
@@ -133,8 +181,12 @@ export default function VoltageWidget() {
             {currentParam.name}
           </span>
           <div className="flex items-center gap-1">
-            <ArrowBigUp size={13} color="#EABD52" />
-            <span className="text-xs text-[#EABD52] tracking-[0.08em]">растет</span>
+            {trend === "down"
+              ? <ArrowBigDown size={13} color="#EABD52" />
+              : <ArrowBigUp size={13} color="#EABD52" />}
+            <span className="text-xs text-[#EABD52] tracking-[0.08em]">
+              {trend === "down" ? "снижается" : trend === "up" ? "растет" : "стабильно"}
+            </span>
           </div>
         </div>
         <StatusPill status={currentParam.status} />

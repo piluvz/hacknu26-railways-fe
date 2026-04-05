@@ -1,10 +1,11 @@
 import ReactECharts from "echarts-for-react";
 import { ArrowBigUp, ArrowBigDown } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTheme } from "../../context/ThemeContext";
 import { useData } from "../../context/DataContext";
 
-const HISTORY_SIZE = 14;
+const HISTORY_SIZE = 20;
+const BASE_URL = "http://127.0.0.1:8000";
 
 function getTrend(history: number[]): "up" | "down" {
   if (history.length < 2) return "up";
@@ -17,25 +18,28 @@ interface TrendCardProps {
   unit: string;
   trend: "up" | "down";
   color: string;
-  data: number[];
+  history: { x: number; y: number }[];
   yMin: number;
   yMax: number;
 }
 
-function TrendCard({ title, value, unit, trend, color, data, yMin, yMax }: TrendCardProps) {
+function TrendCard({ title, value, unit, trend, color, history, yMin, yMax }: TrendCardProps) {
   const { c } = useTheme();
+
+  const xMin = history.length > 0 ? history[0].x : 0;
+  const xMax = history.length > 0 ? history[history.length - 1].x : HISTORY_SIZE - 1;
 
   const option = {
     backgroundColor: "transparent",
     grid: { left: 32, right: 4, top: 8, bottom: 4 },
     xAxis: {
-      type: "category",
+      type: "value" as const,
+      min: xMin,
+      max: xMax,
       show: false,
-      boundaryGap: true,
-      data: data.map((_, i) => i),
     },
     yAxis: {
-      type: "value",
+      type: "value" as const,
       min: yMin,
       max: yMax,
       splitNumber: 1,
@@ -53,8 +57,9 @@ function TrendCard({ title, value, unit, trend, color, data, yMin, yMax }: Trend
     series: [
       {
         type: "bar",
-        data,
+        data: history.map(p => [p.x, p.y]),
         barCategoryGap: "12%",
+        barWidth: Math.max(4, Math.floor(200 / HISTORY_SIZE)),
         itemStyle: {
           borderRadius: [2, 2, 0, 0],
           color: {
@@ -72,8 +77,10 @@ function TrendCard({ title, value, unit, trend, color, data, yMin, yMax }: Trend
     ],
     dataZoom: [{ type: "inside", filterMode: "none" }],
     animation: true,
-    animationDuration: 1000,
+    animationDuration: 600,
     animationEasing: "cubicOut" as const,
+    animationDurationUpdate: 800,
+    animationEasingUpdate: "cubicInOut" as const,
     tooltip: {
       trigger: "axis",
       axisPointer: {
@@ -87,7 +94,7 @@ function TrendCard({ title, value, unit, trend, color, data, yMin, yMax }: Trend
       textStyle: { color: c.text, fontSize: 12 },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       formatter: (params: any) =>
-        `<span style="font-weight:600;color:${color}">${params[0].value} ${unit}</span>`,
+        `<span style="font-weight:600;color:${color}">${params[0].value[1]} ${unit}</span>`,
     },
   };
 
@@ -119,20 +126,59 @@ function TrendCard({ title, value, unit, trend, color, data, yMin, yMax }: Trend
   );
 }
 
+type MetricHistory = { x: number; y: number }[];
+
+function useMetricHistory(trainId: string, metric: string, currentValue: number) {
+  const [history, setHistory] = useState<MetricHistory>([]);
+  const counterRef = useRef(0);
+  const prevValueRef = useRef<number | null>(null);
+  const loadedRef = useRef(false);
+
+  // Initial fetch
+  useEffect(() => {
+    if (!trainId) return;
+    fetch(`${BASE_URL}/api/historic/telemetry/${trainId}/metrics/${metric}`)
+      .then(res => res.json())
+      .then(raw => {
+        const values: number[] = Array.isArray(raw)
+          ? raw
+              .map((item: any) => (typeof item === "number" ? item : item.value))
+              .filter((v: any) => typeof v === "number" && isFinite(v))
+          : [];
+        const sliced = values.slice(-HISTORY_SIZE);
+        counterRef.current = sliced.length;
+        loadedRef.current = true;
+        setHistory(sliced.map((y, i) => ({ x: i, y })));
+      })
+      .catch(() => {
+        loadedRef.current = true;
+      });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trainId, metric]);
+
+  // Slide in new value on each websocket update (only after history is loaded)
+  useEffect(() => {
+    if (!loadedRef.current || currentValue == null || prevValueRef.current === currentValue) return;
+    prevValueRef.current = currentValue;
+    const idx = ++counterRef.current;
+    setHistory(prev => {
+      const next = [...prev, { x: idx, y: currentValue }];
+      return next.length > HISTORY_SIZE ? next.slice(next.length - HISTORY_SIZE) : next;
+    });
+  }, [currentValue]);
+
+  return history;
+}
+
 export default function TrendsWidget() {
   const { c } = useTheme();
   const { data } = useData();
   const { speed, temp_motor, tractive_force } = data.params;
+  const trainId = data.train_id;
 
-  const speedHistory = useRef<number[]>([]);
-  const tempHistory = useRef<number[]>([]);
-  const tractionHistory = useRef<number[]>([]);
-
-  useEffect(() => {
-    speedHistory.current = [...speedHistory.current, speed.value].slice(-HISTORY_SIZE);
-    tempHistory.current = [...tempHistory.current, temp_motor.value].slice(-HISTORY_SIZE);
-    tractionHistory.current = [...tractionHistory.current, tractive_force.value].slice(-HISTORY_SIZE);
-  }, [data]);
+  const speedHistory = useMetricHistory(trainId, "speed", speed.value);
+  const tempHistory = useMetricHistory(trainId, "temp_motor", temp_motor.value);
+  const tractionHistory = useMetricHistory(trainId, "tractive_force", tractive_force.value);
 
   const trendsData = [
     {
@@ -140,33 +186,33 @@ export default function TrendsWidget() {
       title: "Скорость",
       value: speed.value,
       unit: speed.unit,
-      trend: getTrend(speedHistory.current),
+      trend: getTrend(speedHistory.map(p => p.y)),
       color: "#9B6DFF",
       yMin: speed.min,
       yMax: speed.max,
-      data: speedHistory.current.length ? speedHistory.current : [speed.value],
+      history: speedHistory.length ? speedHistory : [{ x: 0, y: speed.value }],
     },
     {
       id: "temp",
       title: "Температура двигателя",
       value: temp_motor.value,
       unit: temp_motor.unit,
-      trend: getTrend(tempHistory.current),
+      trend: getTrend(tempHistory.map(p => p.y)),
       color: "#FF6B6B",
       yMin: temp_motor.min,
       yMax: temp_motor.max,
-      data: tempHistory.current.length ? tempHistory.current : [temp_motor.value],
+      history: tempHistory.length ? tempHistory : [{ x: 0, y: temp_motor.value }],
     },
     {
       id: "traction",
       title: "Тяговое усилие",
       value: tractive_force.value,
       unit: tractive_force.unit,
-      trend: getTrend(tractionHistory.current),
+      trend: getTrend(tractionHistory.map(p => p.y)),
       color: "#3C96F6",
       yMin: tractive_force.min,
       yMax: tractive_force.max,
-      data: tractionHistory.current.length ? tractionHistory.current : [tractive_force.value],
+      history: tractionHistory.length ? tractionHistory : [{ x: 0, y: tractive_force.value }],
     },
   ];
 

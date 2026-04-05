@@ -1,43 +1,15 @@
 import ReactECharts from "echarts-for-react";
 import { ArrowBigUp, ArrowBigDown } from "lucide-react";
+import { useEffect, useRef } from "react";
 import { useTheme } from "../../context/ThemeContext";
+import { useData } from "../../context/DataContext";
 
-// TODO: Replace with data from backend
-const TRENDS_DATA = [
-  {
-    id: "speed",
-    title: "Скорость",
-    value: 240,
-    unit: "км/ч",
-    trend: "down" as const,
-    color: "#9B6DFF",
-    yMin: 80,
-    yMax: 250,
-    data: [85, 85, 120, 120, 150, 150, 180, 200, 200, 220, 240, 240, 235, 230],
-  },
-  {
-    id: "fuel",
-    title: "Расход топлива",
-    value: 3.8,
-    unit: "л/км",
-    trend: "down" as const,
-    color: "#3C96F6",
-    yMin: 1,
-    yMax: 4,
-    data: [1.1, 1.1, 1.8, 1.8, 2.2, 2.5, 2.8, 3.0, 3.2, 3.5, 3.8, 3.8, 3.75, 3.7],
-  },
-  {
-    id: "temp",
-    title: "Температура двигателя",
-    value: 92,
-    unit: "°C",
-    trend: "up" as const,
-    color: "#FF6B6B",
-    yMin: 50,
-    yMax: 100,
-    data: [52, 52, 58, 62, 65, 68, 72, 76, 80, 84, 88, 90, 91, 92],
-  },
-];
+const HISTORY_SIZE = 14;
+
+function getTrend(history: number[]): "up" | "down" {
+  if (history.length < 2) return "up";
+  return history[history.length - 1] >= history[history.length - 2] ? "up" : "down";
+}
 
 interface TrendCardProps {
   title: string;
@@ -149,6 +121,54 @@ function TrendCard({ title, value, unit, trend, color, data, yMin, yMax }: Trend
 
 export default function TrendsWidget() {
   const { c } = useTheme();
+  const { data } = useData();
+  const { speed, temp_motor, tractive_force } = data.params;
+
+  const speedHistory = useRef<number[]>([]);
+  const tempHistory = useRef<number[]>([]);
+  const tractionHistory = useRef<number[]>([]);
+
+  useEffect(() => {
+    speedHistory.current = [...speedHistory.current, speed.value].slice(-HISTORY_SIZE);
+    tempHistory.current = [...tempHistory.current, temp_motor.value].slice(-HISTORY_SIZE);
+    tractionHistory.current = [...tractionHistory.current, tractive_force.value].slice(-HISTORY_SIZE);
+  }, [data]);
+
+  const trendsData = [
+    {
+      id: "speed",
+      title: "Скорость",
+      value: speed.value,
+      unit: speed.unit,
+      trend: getTrend(speedHistory.current),
+      color: "#9B6DFF",
+      yMin: speed.min,
+      yMax: speed.max,
+      data: speedHistory.current.length ? speedHistory.current : [speed.value],
+    },
+    {
+      id: "temp",
+      title: "Температура двигателя",
+      value: temp_motor.value,
+      unit: temp_motor.unit,
+      trend: getTrend(tempHistory.current),
+      color: "#FF6B6B",
+      yMin: temp_motor.min,
+      yMax: temp_motor.max,
+      data: tempHistory.current.length ? tempHistory.current : [temp_motor.value],
+    },
+    {
+      id: "traction",
+      title: "Тяговое усилие",
+      value: tractive_force.value,
+      unit: tractive_force.unit,
+      trend: getTrend(tractionHistory.current),
+      color: "#3C96F6",
+      yMin: tractive_force.min,
+      yMax: tractive_force.max,
+      data: tractionHistory.current.length ? tractionHistory.current : [tractive_force.value],
+    },
+  ];
 
   const DIVIDER = <div className="w-px self-stretch mx-2" style={{ backgroundColor: c.innerBorder }} />;
 
@@ -165,10 +185,10 @@ export default function TrendsWidget() {
       </div>
 
       <div className="flex gap-5">
-        {TRENDS_DATA.map((t, i) => (
+        {trendsData.map((t, i) => (
           <>
             <TrendCard key={t.id} {...t} />
-            {i < TRENDS_DATA.length - 1 && DIVIDER}
+            {i < trendsData.length - 1 && DIVIDER}
           </>
         ))}
       </div>

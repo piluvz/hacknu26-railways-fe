@@ -74,7 +74,7 @@ export default function HomePage() {
     return () => {
       ws.close();
     };
-  }, [trainId]);
+  }, [trainId, distanceSelected]);
 
   const DISPATCHER_TRAINS = ["TE33A-L006", "TE33A-L007", "TE33A-L008", "TE33A-L009"];
 

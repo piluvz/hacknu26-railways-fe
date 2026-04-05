@@ -195,7 +195,7 @@ interface TelemetryData {
   time: string;
   train_id: string;
   health_score: number;
-  health_category: "норма" | "предупреждение" | "критично";
+  health_category: "Норма" | "Предупреждение" | "Критично";
   alert_count: number;
   top_impacts: [
       { metric: string; status: "норма" | "предупреждение" | "критично"; impact: number; },
@@ -455,7 +455,7 @@ const MOCK_JSON : TelemetryData = {
   time: "2026-04-04T22:49:43+00:00",
   train_id: "TE33A-L006",
   health_score: 67,
-  health_category: "предупреждение",
+  health_category: "Предупреждение",
   alert_count: 0,
   top_impacts: [
       { metric: "speed", status: "норма", impact: 80},

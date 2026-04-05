@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { Radio, Download } from "lucide-react";
+import { Radio, Download, Loader } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 // TODO: Replace with data from backend
 const KM_POINTS = [120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240];
@@ -34,9 +36,68 @@ function DotTooltip({ label }: { label: string }) {
     );
 }
 
+async function exportToPdf() {
+    const scroller = document.getElementById("main-scroll");
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    const originalScrollTop = scroller ? scroller.scrollTop : 0;
+    const totalScroll = scroller ? scroller.scrollHeight - scroller.clientHeight : 0;
+
+    const pdf = new jsPDF({ orientation: "landscape", unit: "px", format: [vw, vh] });
+
+    // Capture first page (scrollTop = 0)
+    if (scroller) scroller.scrollTop = 0;
+    await new Promise((r) => setTimeout(r, 120));
+
+    let pageIndex = 0;
+    let currentScrollTop = 0;
+
+    while (true) {
+        // Save position before html2canvas (it may reset scrollTop)
+        if (scroller) scroller.scrollTop = currentScrollTop;
+        await new Promise((r) => setTimeout(r, 120));
+
+        const canvas = await html2canvas(document.body, {
+            useCORS: true,
+            scale: 1.5,
+            width: vw,
+            height: vh,
+            windowWidth: vw,
+            windowHeight: vh,
+            scrollX: 0,
+            scrollY: 0,
+        });
+
+        const imgData = canvas.toDataURL("image/jpeg", 0.85);
+        if (pageIndex > 0) pdf.addPage([vw, vh], "landscape");
+        pdf.addImage(imgData, "JPEG", 0, 0, vw, vh);
+
+        if (!scroller || currentScrollTop >= totalScroll) break;
+
+        currentScrollTop = Math.min(currentScrollTop + scroller.clientHeight, totalScroll);
+        pageIndex++;
+    }
+
+    // Restore scroll
+    if (scroller) scroller.scrollTop = originalScrollTop;
+
+    pdf.save(`report-${new Date().toISOString().slice(0, 19).replace(/:/g, "-")}.pdf`);
+}
+
 export default function HistoryBar() {
     const { c } = useTheme();
     const [hovered, setHovered] = useState<number | "now" | null>(null);
+    const [exporting, setExporting] = useState(false);
+
+    async function handleExport() {
+        setExporting(true);
+        try {
+            await exportToPdf();
+        } finally {
+            setExporting(false);
+        }
+    }
 
     return (
         <div
@@ -114,15 +175,17 @@ export default function HistoryBar() {
                 </button>
 
                 <button
-                    className="w-fit flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-opacity hover:opacity-80 whitespace-nowrap"
+                    onClick={handleExport}
+                    disabled={exporting}
+                    className="w-fit flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-opacity hover:opacity-80 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{
                         border: `1.5px solid ${GOLD}`,
                         color: GOLD,
                         backgroundColor: "transparent",
                     }}
                 >
-                    <Download size={12} />
-                    Экспортировать в PDF
+                    {exporting ? <Loader size={12} className="animate-spin" /> : <Download size={12} />}
+                    {exporting ? "Экспорт..." : "Экспортировать в PDF"}
                 </button>
             </div>
         </div>

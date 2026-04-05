@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTheme } from "../../context/ThemeContext";
+import { useData } from "../../context/DataContext";
 
 type AlertSeverity = "critical" | "warning";
 
@@ -7,30 +8,10 @@ interface AlertItem {
   id: string;
   severity: AlertSeverity;
   time: string;
-  title: string;
-  description: string;
-  action: string;
+  title: string | undefined;
+  description: string | undefined;
+  action: string | undefined;
 }
-
-// TODO: Replace hardcoded values with data from backend
-const ALERTS_FROM_BACKEND: AlertItem[] = [
-  {
-    id: "1",
-    severity: "critical",
-    time: "14:20",
-    title: "Уровень топлива",
-    description: "< 15% от ёмкости",
-    action: "Сообщить диспетчеру",
-  },
-  {
-    id: "2",
-    severity: "warning",
-    time: "14:20",
-    title: "Давление воздуха",
-    description: "6.1 бар → норма 7+",
-    action: "Наблюдение",
-  },
-];
 
 const SEVERITY_CONFIG: Record<
   AlertSeverity,
@@ -99,6 +80,7 @@ function AlertCard({ alert, index }: { alert: AlertItem; index: number }) {
           visible && alert.severity === "critical"
             ? "critical-pulse 1.6s ease-in-out infinite"
             : "none",
+        animationDelay: "0.4s",
       }}
     >
       <div className="flex justify-between">
@@ -127,16 +109,53 @@ function AlertCard({ alert, index }: { alert: AlertItem; index: number }) {
 
 export default function AlertsPanel() {
   const { c } = useTheme();
-  const alerts = ALERTS_FROM_BACKEND;
+  const { data } = useData();
+
+  const alerts = useMemo<AlertItem[]>(() => {
+    if (!data?.params) return [];
+
+    const result: AlertItem[] = [];
+    const time = new Date(data.time).toLocaleTimeString("ru-RU", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    for (const [key, param] of Object.entries(data.params)) {
+      if (key === "system_condition") continue;
+      const p = param as {
+        name?: string;
+        status: string;
+        value: number;
+        unit: string;
+        range_label: string;
+        alert_message?: string;
+        recommendation?: string;
+      };
+      if (p.status !== "критично" && p.status !== "предупреждение") continue;
+
+      result.push({
+        id: key,
+        severity: p.status === "критично" ? "critical" : "warning",
+        time,
+        title: p.name,
+        description: p.alert_message,
+        action: p.recommendation,
+      });
+    }
+
+    return result.sort((a, b) =>
+      a.severity === b.severity ? 0 : a.severity === "critical" ? -1 : 1
+    );
+  }, [data]);
 
   return (
     <div
-      className="flex flex-col w-[250px] px-5 py-5 border-l h-full"
+      className="flex flex-col w-[250px] border-l h-full"
       style={{ backgroundColor: c.widgetBg, borderColor: c.border }}
     >
       <style>{PULSE_STYLE}</style>
 
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex items-center justify-between px-5 pt-5 mb-1">
         <span className="text-sm uppercase tracking-[0.08em]" style={{ color: c.text }}>
           Алерты
         </span>
@@ -148,7 +167,7 @@ export default function AlertsPanel() {
         </span>
       </div>
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 overflow-y-auto flex-1 min-h-0 px-5 pb-25 pt-5">
         {alerts.map((alert, i) => (
           <AlertCard key={alert.id} alert={alert} index={i} />
         ))}

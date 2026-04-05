@@ -24,7 +24,7 @@ export default function HomePage() {
       <div className="flex flex-1 overflow-hidden">
         <HealthIndex />
 
-        <div className="flex flex-col gap-5 p-5 w-full overflow-y-auto pb-24">
+        <div id="main-scroll" className="flex flex-col gap-5 p-5 w-full overflow-y-auto pb-24">
           <div className="flex gap-5">
             <div className="flex-3">
               <SpeedWidget />
@@ -82,7 +82,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="ml-auto">
+        <div className="ml-auto h-full">
           <AlertsPanel />
         </div>
       </div>

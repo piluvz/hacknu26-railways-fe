@@ -6,10 +6,8 @@ import { useAuth } from "../../context/AuthContext";
 import { useHistory } from "../../context/HistoryContext";
 
 const DISPATCHER_TRAINS = [
+  "KZ8A-L001",
   "TE33A-L006",
-  "TE33A-L007",
-  "TE33A-L008",
-  "TE33A-L009",
 ];
 
 export default function Header() {

@@ -49,7 +49,7 @@ export default function Header() {
                 )}
             </div>
 
-            <div className="font-semibold mr-auto">Локомотив {data.route.route_name}</div>
+            <div className="font-semibold mr-auto">Локомотив {data.route_info.route_name}</div>
 
             <div
                 className="absolute flex items-center gap-[10px]"

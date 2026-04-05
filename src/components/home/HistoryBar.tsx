@@ -101,8 +101,8 @@ export default function HistoryBar() {
     const { distanceSelected, setDistanceSelected } = useHistory();
     const [hovered, setHovered] = useState<number | "now" | null>(null);
     const [exporting, setExporting] = useState(false);
-    const routeMin = data.route.stops[0].distance_km;
-    const routeMax = data.route.stops[data.route.stops.length - 1].distance_km;
+    const routeMin = data.route_info.stops[0].distance_km;
+    const routeMax = data.route_info.stops[data.route_info.stops.length - 1].distance_km;
     const kmPoints = generateSteps(routeMin, routeMax);
    // console.log(kmPoints);
 

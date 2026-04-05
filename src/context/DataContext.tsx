@@ -270,7 +270,22 @@ interface TelemetryData {
       norm_min: number;
       norm_max: number;
     },
-    fuel_liters: {
+    fuel_liters?: {
+      name?: string;
+      max: number;
+      min: number;
+      unit: string;
+      range: string;
+      value: number;
+      status: "норма" | "предупреждение" | "критично";
+      range_label: string;
+      alert_message: string;
+      recommendation: string;
+      norm_min: number;
+      norm_max: number;
+    },
+    energy_usage?: {
+      name?: string;
       max: number;
       min: number;
       unit: string;

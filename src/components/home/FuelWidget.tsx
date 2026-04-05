@@ -5,11 +5,16 @@ import { useData } from "../../context/DataContext";
 export default function FuelWidget() {
   const { c } = useTheme();
   const { data } = useData();
-  const value = data.params.fuel_liters.value;
-  const max = data.params.fuel_liters.max;
-  const norm_max = data.params.fuel_liters.norm_max;
+
+  const source = data.params.fuel_liters ?? data.params.energy_usage;
+  const title = source?.name ?? (data.params.fuel_liters ? "Топливо" : "Потребление энергии");
+  const value = source?.value ?? 0;
+  const max = source?.max ?? 1;
+  const norm_max = source?.norm_max ?? 0;
+  const unit = source?.unit ?? "";
   const percentage = (value / max) * 100;
   const normMaxPct = (norm_max / max) * 100;
+
   const [displayPct, setDisplayPct] = useState(0);
 
   useEffect(() => {
@@ -23,16 +28,16 @@ export default function FuelWidget() {
       style={{ backgroundColor: c.widgetBg, color: c.text, borderColor: c.border }}
     >
       <span className="text-sm uppercase tracking-[0.08em] mb-3" style={{ color: c.textMuted }}>
-        Потребление энергии
+        {title}
       </span>
 
       <div className="flex items-baseline gap-2">
         <span className="text-4xl font-semibold tracking-tight">{value}</span>
-        <span className="text-md font-regular">кН</span>
+        <span className="text-md font-regular">{unit}</span>
       </div>
 
       <div className="text-[10px] mb-3" style={{ color: c.textMuted }}>
-        { value } кВт·ч из { max } кВт·ч
+        {value} {unit} из {max} {unit}
       </div>
 
       {/* Прогресс-бар */}

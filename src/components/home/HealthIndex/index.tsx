@@ -91,7 +91,7 @@ export default function HealthIndex() {
         </div>
       ))}
 
-      <div
+      {/* <div
         style={{
           borderTop: `1px solid ${c.border}`,
           paddingTop: 24,
@@ -101,7 +101,7 @@ export default function HealthIndex() {
         }}
       >
         Формула индекса объясненная
-      </div>
+      </div> */}
     </div>
   );
 }

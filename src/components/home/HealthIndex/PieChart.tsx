@@ -51,7 +51,7 @@ export default function PieChart() {
         {
           type: "text",
           style: {
-            text: `${value}`,
+            text: `${Math.round(value)}`,
             fontSize: 48,
             fontWeight: 600,
             fill: c.text,

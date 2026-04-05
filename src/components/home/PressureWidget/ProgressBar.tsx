@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "../../../context/ThemeContext";
 
-export default function ProgressBar({ value, status, max }: {
+export default function ProgressBar({ value, status, max, normMin, normMax }: {
     value: number;
     status: "норма" | "предупреждение" | "критично";
     max: number;
+    normMin: number;
+    normMax: number;
 }) {
     const { c } = useTheme();
     const color = status === "норма"
@@ -14,7 +16,8 @@ export default function ProgressBar({ value, status, max }: {
         : "#EABD52";
   //  const max = 100;
     const percentage = (value / max) * 100;
-
+    const normMinPct = (normMin / max) * 100;
+    const normMaxPct = (normMax / max) * 100;
     const [displayPct, setDisplayPct] = useState(0);
 
     useEffect(() => {
@@ -31,11 +34,17 @@ export default function ProgressBar({ value, status, max }: {
                 />
             </div>
 
-            <div className="absolute top-[-4px] right-[20%] flex flex-col items-center">
+            {/* Максимальная отметка */}
+            <div className="absolute top-[-4px] flex flex-col items-center"
+                style={{ left: `${normMaxPct}%`, transform: "translateX(-50%)" }}
+            >
                 <div className="h-5 w-[3px] bg-[#E23F3F] rounded-full" />
             </div>
 
-            <div className="absolute top-[-4px] left-[20%] flex flex-col items-center">
+            {/* Минимальная отметка */}
+            <div className="absolute top-[-4px] flex flex-col items-center"
+                 style={{ left: `${normMinPct}%`, transform: "translateX(-50%)" }}
+            >
                 <div className="h-5 w-[3px] bg-[#F7A92E] rounded-full" />
             </div>
         </div>

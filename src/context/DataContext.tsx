@@ -214,6 +214,8 @@ interface TelemetryData {
       range_label: string;
       alert_message: string;
       recommendation: string;
+      norm_min: number;
+      norm_max: number;
     },
     temp_air: {
       max: number;
@@ -225,6 +227,8 @@ interface TelemetryData {
       range_label: string;
       alert_message: string;
       recommendation: string;
+      norm_min: number;
+      norm_max: number;
     },
     temp_oil: {
       name: string;
@@ -237,6 +241,8 @@ interface TelemetryData {
       range_label: string;
       alert_message: string;
       recommendation: string;
+      norm_min: number;
+      norm_max: number;
     },
     temp_motor: {
       max: number;
@@ -248,6 +254,8 @@ interface TelemetryData {
       range_label: string;
       alert_message: string;
       recommendation: string;
+      norm_min: number;
+      norm_max: number;
     },
     brake_force: {
       max: number;
@@ -259,6 +267,8 @@ interface TelemetryData {
       range_label: string;
       alert_message: string;
       recommendation: string;
+      norm_min: number;
+      norm_max: number;
     },
     fuel_liters: {
       max: number;
@@ -270,6 +280,8 @@ interface TelemetryData {
       range_label: string;
       alert_message: string;
       recommendation: string;
+      norm_min: number;
+      norm_max: number;
     },
     pressure_air: {
       max: number;
@@ -281,6 +293,8 @@ interface TelemetryData {
       range_label: string;
       alert_message: string;
       recommendation: string;
+      norm_min: number;
+      norm_max: number;
     },
     pressure_oil: {
       max: number;
@@ -292,6 +306,8 @@ interface TelemetryData {
       range_label: string;
       alert_message: string;
       recommendation: string;
+      norm_min: number;
+      norm_max: number;
     },
     current_ampere: {
       max: number;
@@ -303,6 +319,8 @@ interface TelemetryData {
       range_label: string;
       alert_message: string;
       recommendation: string;
+      norm_min: number;
+      norm_max: number;
     },
     pressure_brake: {
       max: number;
@@ -314,6 +332,8 @@ interface TelemetryData {
       range_label: string;
       alert_message: string;
       recommendation: string;
+      norm_min: number;
+      norm_max: number;
     },
     tractive_force: {
       max: number;
@@ -325,6 +345,8 @@ interface TelemetryData {
       range_label: string;
       alert_message: string;
       recommendation: string;
+      norm_min: number;
+      norm_max: number;
     },
     temp_converters: {
       max: number;
@@ -336,6 +358,8 @@ interface TelemetryData {
       range_label: string;
       alert_message: string;
       recommendation: string;
+      norm_min: number;
+      norm_max: number;
     },
     pressure_main_tank: {
       max: number;
@@ -347,6 +371,8 @@ interface TelemetryData {
       range_label: string;
       alert_message: string;
       recommendation: string;
+      norm_min: number;
+      norm_max: number;
     },
     system_condition: {
       name: string;
@@ -420,7 +446,9 @@ const MOCK_JSON : TelemetryData = {
       status: "норма",
       range_label: "Нормальная скорость",
       alert_message: "",
-      recommendation: ""
+      recommendation: "",
+      norm_min: 10,
+      norm_max: 50
     },
     temp_air: {
       max: 200,
@@ -431,7 +459,9 @@ const MOCK_JSON : TelemetryData = {
       status: "критично",
       range_label: "Холодный воздух",
       alert_message: "",
-      recommendation: ""
+      recommendation: "",
+      norm_min: 10,
+      norm_max: 50
     },
     temp_oil: {
       name: "Температура масла",
@@ -444,6 +474,8 @@ const MOCK_JSON : TelemetryData = {
       range_label: "Рабочая температура",
       alert_message: "",
       recommendation: "",
+      norm_min: 10,
+      norm_max: 50
     },
     temp_motor: {
       max: 200,
@@ -454,7 +486,9 @@ const MOCK_JSON : TelemetryData = {
       status: "предупреждение",
       range_label: "Рабочая температура",
       alert_message: "",
-      recommendation: ""
+      recommendation: "",
+      norm_min: 10,
+      norm_max: 50
     },
     brake_force: {
       max: 1000,
@@ -465,7 +499,9 @@ const MOCK_JSON : TelemetryData = {
       status: "норма",
       range_label: "Отпущены",
       alert_message: "",
-      recommendation: ""
+      recommendation: "",
+      norm_min: 10,
+      norm_max: 50
     },
     fuel_liters: {
       max: 1500,
@@ -476,7 +512,9 @@ const MOCK_JSON : TelemetryData = {
       status: "норма",
       range_label: "В норме",
       alert_message: "",
-      recommendation: ""
+      recommendation: "",
+      norm_min: 10,
+      norm_max: 1200
     },
     pressure_air: {
       max: 3.0,
@@ -487,7 +525,9 @@ const MOCK_JSON : TelemetryData = {
       status: "предупреждение",
       range_label: "Нормальное давление",
       alert_message: "",
-      recommendation: ""
+      recommendation: "",
+      norm_min: 0.2,
+      norm_max: 2.8
     },
     pressure_oil: {
       max: 7.0,
@@ -498,7 +538,9 @@ const MOCK_JSON : TelemetryData = {
       status: "норма",
       range_label: "Нормальное давление",
       alert_message: "",
-      recommendation: ""
+      recommendation: "",
+      norm_min: 1.2,
+      norm_max: 4.2
     },
     current_ampere: {
       max: 2000,
@@ -509,7 +551,9 @@ const MOCK_JSON : TelemetryData = {
       status: "норма",
       range_label: "В норме",
       alert_message: "",
-      recommendation: ""
+      recommendation: "",
+      norm_min: 10,
+      norm_max: 50
     },
     pressure_brake: {
       max: 9.0,
@@ -520,7 +564,9 @@ const MOCK_JSON : TelemetryData = {
       status: "норма",
       range_label: "Нормальное давление",
       alert_message: "",
-      recommendation: ""
+      recommendation: "",
+      norm_min: 0.5,
+      norm_max: 6.7
     },
     tractive_force: {
       max: 300,
@@ -531,7 +577,9 @@ const MOCK_JSON : TelemetryData = {
       status: "норма",
       range_label: "В норме",
       alert_message: "",
-      recommendation: ""
+      recommendation: "",
+      norm_min: 10,
+      norm_max: 210
     },
     temp_converters: {
       max: 200,
@@ -542,7 +590,9 @@ const MOCK_JSON : TelemetryData = {
       status: "норма",
       range_label: "Холодные преобразователи",
       alert_message: "",
-      recommendation: ""
+      recommendation: "",
+      norm_min: 10,
+      norm_max: 50
     },
     pressure_main_tank: {
       max: 9.0,
@@ -553,7 +603,9 @@ const MOCK_JSON : TelemetryData = {
       status: "норма",
       range_label: "Нормальное давление",
       alert_message: "",
-      recommendation: ""
+      recommendation: "",
+      norm_min: 2.5,
+      norm_max: 8.6
     },
     system_condition: {
       name: "Состояние Узлов",

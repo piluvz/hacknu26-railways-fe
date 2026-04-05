@@ -8,7 +8,7 @@ export default function SmallBarChart() {
   
   const value = data.params.tractive_force.value;
   const max = data.params.tractive_force.max;
-  const norm_max = 200;
+  const norm_max = data.params.tractive_force.norm_max;
   const percentage = (value / max) * 100;
   const normMaxPct = (norm_max / max) * 100;
   const [displayPct, setDisplayPct] = useState(0);

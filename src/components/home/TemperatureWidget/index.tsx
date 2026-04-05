@@ -33,28 +33,28 @@ export default function TemperatureWidget() {
                 <div>
                     <PieChart value={data.params.temp_motor.value} unit={data.params.temp_motor.unit} status={data.params.temp_motor.status} />
                     <div className="text-[12px] text-center" style={{ color: c.text }}>
-                        { data.params.temp_motor.name }
+                        Двигатель
                     </div>
                 </div>
 
                 <div>
                     <PieChart value={data.params.temp_oil.value} unit={data.params.temp_oil.unit} status={data.params.temp_oil.status} />
                     <div className="text-[12px] text-center" style={{ color: c.text }}>
-                        { data.params.temp_oil.name }
+                        Масло
                     </div>
                 </div>
 
                 <div>
                     <PieChart value={data.params.temp_converters.value} unit={data.params.temp_converters.unit} status={data.params.temp_converters.status} />
                     <div className="text-[12px] text-center" style={{ color: c.text }}>
-                        { data.params.temp_converters.name }
+                        Преобразователи
                     </div>
                 </div>
 
                 <div>
                     <PieChart value={data.params.temp_air.value} unit={data.params.temp_air.unit} status={data.params.temp_air.status} />
                     <div className="text-[12px] text-center" style={{ color: c.text }}>
-                        { data.params.temp_air.name }
+                        Воздух
                     </div>
                 </div>
 

@@ -7,7 +7,9 @@ export default function FuelWidget() {
   const { data } = useData();
   const value = data.params.fuel_liters.value;
   const max = data.params.fuel_liters.max;
+  const norm_max = data.params.fuel_liters.norm_max;
   const percentage = (value / max) * 100;
+  const normMaxPct = (norm_max / max) * 100;
   const [displayPct, setDisplayPct] = useState(0);
 
   useEffect(() => {
@@ -43,7 +45,9 @@ export default function FuelWidget() {
         </div>
 
         {/* Максимальная отметка */}
-        <div className="absolute top-[-4px] right-[20%] flex flex-col items-center">
+        <div className="absolute top-[-4px] flex flex-col items-center"
+          style={{ left: `${normMaxPct}%`, transform: "translateX(-50%)" }}
+        >
           <div className="h-5 w-[3px] bg-[#E23F3F] rounded-full" />
         </div>
       </div>

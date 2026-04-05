@@ -14,6 +14,7 @@ import TemperatureWidget from "../../components/home/TemperatureWidget";
 import PressureWidget from "../../components/home/PressureWidget";
 import LocomotiveMap from "../../components/home/Map/LocomotiveMap";
 import RouteWidget from "../../components/home/Map/RouteWidget";
+import CurrentWidget from "../../components/home/CurrentWidget";
 
 export default function HomePage() {
   const { c } = useTheme();
@@ -46,7 +47,7 @@ export default function HomePage() {
                         <div className="flex-3 flex flex-col gap-4">
                             <FuelWidget/>
                             <div className="flex-1">
-                                <BreaksWidget />
+                                <CurrentWidget />
                             </div>
                         </div>
 

@@ -40,6 +40,8 @@ export default function PressureWidget() {
                     value={data.params.pressure_brake.value} 
                     status={data.params.pressure_brake.status} 
                     max={data.params.pressure_brake.max}
+                    normMax={data.params.pressure_brake.norm_max}
+                    normMin={data.params.pressure_brake.norm_min}
                 />
             </div>
 
@@ -61,6 +63,8 @@ export default function PressureWidget() {
                     value={data.params.pressure_oil.value} 
                     status={data.params.pressure_oil.status} 
                     max={data.params.pressure_oil.max}
+                    normMax={data.params.pressure_oil.norm_max}
+                    normMin={data.params.pressure_oil.norm_min}
                 />
             </div>
 
@@ -82,7 +86,8 @@ export default function PressureWidget() {
                     value={data.params.pressure_main_tank.value} 
                     status={data.params.pressure_main_tank.status} 
                     max={data.params.pressure_main_tank.max}
-
+                    normMax={data.params.pressure_main_tank.norm_max}
+                    normMin={data.params.pressure_main_tank.norm_min}
                 />
             </div>
 
@@ -104,6 +109,8 @@ export default function PressureWidget() {
                     value={data.params.pressure_air.value} 
                     status={data.params.pressure_air.status} 
                     max={data.params.pressure_air.max}
+                    normMax={data.params.pressure_air.norm_max}
+                    normMin={data.params.pressure_air.norm_min}
                 />
             </div>
 

@@ -1,8 +1,13 @@
+import { useData } from "../../context/DataContext";
 import { useTheme } from "../../context/ThemeContext";
 
 export default function BreaksWidget() {
   const { c } = useTheme();
-  const value = 0;
+  const { data } = useData();
+  
+  const value = data.params.brake_force.value;
+  const unit = data.params.brake_force.unit;
+  const label = data.params.brake_force.range_label;
 
   return (
     <div
@@ -15,12 +20,12 @@ export default function BreaksWidget() {
 
       <div className="flex items-baseline gap-2 mb-3">
         <span className="text-4xl font-semibold tracking-tight">{value}</span>
-        <span className="text-sm font-regular">кПа</span>
+        <span className="text-sm font-regular">{unit}</span>
       </div>
 
       <span className="flex items-center gap-1.5 text-sm text-[#3C96F6]">
         <span className="inline-block w-2 h-2 rounded-full bg-[#3C96F6] animate-pulse" />
-        Отпущены
+        {label}
       </span>
     </div>
   );

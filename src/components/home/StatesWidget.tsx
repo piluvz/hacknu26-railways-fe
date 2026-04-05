@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "../../context/ThemeContext";
+import { useData } from "../../context/DataContext";
 
 type NodeStatus = "ok" | "warning" | "error";
 
@@ -8,16 +9,6 @@ interface NodeData {
   label: string;
   status: NodeStatus;
 }
-
-// TODO: Replace hardcoded values with data from backend
-const NODES_FROM_BACKEND: NodeData[] = [
-  { id: "engine", label: "Двигатель", status: "warning" },
-  { id: "brakes", label: "Тормоза", status: "error" },
-  { id: "fuel", label: "Топливо", status: "warning" },
-  { id: "electrical", label: "Электрика", status: "ok" },
-  { id: "wheelsets", label: "Колес. пары", status: "ok" },
-  { id: "compressor", label: "Компрессор", status: "error" },
-];
 
 const STATUS_CONFIG: Record<
   NodeStatus,
@@ -38,9 +29,12 @@ const STATUS_CONFIG: Record<
   },
 };
 
-const ALERT_NODES = NODES_FROM_BACKEND.filter((n) => n.status === "error").map(
-  (n) => n.label,
-);
+function valueToStatus(value: string): NodeStatus {
+  const v = value.toLowerCase();
+  if (v === "критично") return "error";
+  if (v === "предупреждение") return "warning";
+  return "ok";
+}
 
 function NodeCard({ node, index }: { node: NodeData; index: number }) {
   const { c } = useTheme();
@@ -54,7 +48,7 @@ function NodeCard({ node, index }: { node: NodeData; index: number }) {
 
   return (
     <div
-      className="flex flex-col justify-between rounded-lg px-2 py-2 max-w-24 h-20"
+      className="flex flex-col justify-between rounded-lg px-2 py-2 max-w-24 h-22"
       style={{
         backgroundColor: cfg.bg,
         border: `1px solid ${cfg.border}`,
@@ -75,7 +69,17 @@ function NodeCard({ node, index }: { node: NodeData; index: number }) {
 
 export default function StatesWidget() {
   const { c } = useTheme();
-  const nodes = NODES_FROM_BACKEND;
+  const { data } = useData();
+
+  const nodes: NodeData[] = data.params.system_condition.value.map(
+    (item, index) => ({
+      id: String(index),
+      label: item.name,
+      status: valueToStatus(item.value),
+    }),
+  );
+
+  const alertNodes = nodes.filter((n) => n.status === "error").map((n) => n.label);
 
   return (
     <div
@@ -86,15 +90,15 @@ export default function StatesWidget() {
         Состояние узлов
       </span>
 
-      {ALERT_NODES.length > 0 && (
+      {alertNodes.length > 0 && (
         <span className="text-sm font-regular text-[#E23F3F] mb-4 leading-snug">
-          Проверьте данные {ALERT_NODES.join(" и ")}
+          Проверьте данные {alertNodes.join(" и ")}
         </span>
       )}
 
       <div className="grid grid-cols-3 gap-x-3 gap-y-5">
-        {nodes.map((node, i) => (
-          <NodeCard key={node.id} node={node} index={i} />
+        {nodes.map((node, index) => (
+          <NodeCard key={node.id} node={node} index={index} />
         ))}
       </div>
     </div>

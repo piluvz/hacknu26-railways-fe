@@ -227,6 +227,7 @@ interface TelemetryData {
       recommendation: string;
     },
     temp_oil: {
+      name: string;
       max: number;
       min: number;
       unit: string;
@@ -346,6 +347,13 @@ interface TelemetryData {
       range_label: string;
       alert_message: string;
       recommendation: string;
+    },
+    system_condition: {
+      name: string;
+      value: {
+        name: string;
+        value: "норма" | "предупреждение" | "критично";
+      }[];
     }
   },
   route: {
@@ -379,7 +387,7 @@ interface TelemetryData {
             distance_km: number;
         }
     ]
-  }
+  },
 }
 
 const MOCK_JSON : TelemetryData = {
@@ -418,6 +426,7 @@ const MOCK_JSON : TelemetryData = {
       recommendation: ""
     },
     temp_oil: {
+      name: "Температура масла",
       max: 150,
       min: 0,
       unit: "°C",
@@ -426,7 +435,7 @@ const MOCK_JSON : TelemetryData = {
       status: "норма",
       range_label: "Рабочая температура",
       alert_message: "",
-      recommendation: ""
+      recommendation: "",
     },
     temp_motor: {
       max: 200,
@@ -537,6 +546,17 @@ const MOCK_JSON : TelemetryData = {
       range_label: "Нормальное давление",
       alert_message: "",
       recommendation: ""
+    },
+    system_condition: {
+      name: "Состояние Узлов",
+      value: [
+        { name: "Давление тормозной магистрали", value: "норма" },
+        { name: "Тяговое усилие", value: "критично" },
+        { name: "Температура масла", value: "предупреждение" },
+        { name: "Температура двигатель", value: "норма" },
+        { name: "Температура воздуха", value: "норма" },
+        { name: "Давление главного резервуара", value: "норма" }
+      ]
     }
   },
   route: {

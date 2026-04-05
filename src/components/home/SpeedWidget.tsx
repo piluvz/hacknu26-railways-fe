@@ -2,9 +2,7 @@ import ReactECharts from "echarts-for-react";
 import { ArrowBigUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTheme } from "../../context/ThemeContext";
-
-// TODO: Replace hardcoded value with data from backend
-const SPEED_FROM_BACKEND = 250; // km/h
+import { useData } from "../../context/DataContext";
 
 function buildGaugeColors(
   speed: number,
@@ -45,8 +43,10 @@ function buildGaugeColors(
 
 export default function SpeedWidget() {
   const { c } = useTheme();
-  const speed = SPEED_FROM_BACKEND;
-  const maxSpeed = 300;
+  const { data } = useData();
+  const speed = data.params.speed.value;
+  const maxSpeed = data.params.speed.max;
+  const unit = data.params.speed.unit;
   const [displaySpeed, setDisplaySpeed] = useState(0);
 
   useEffect(() => {
@@ -94,7 +94,8 @@ export default function SpeedWidget() {
         detail: {
           valueAnimation: false,
           offsetCenter: [0, "15%"],
-          formatter: (val: number) => `{value|${Math.round(val)}}\n{unit|км/ч}`,
+          formatter: (val: number) =>
+            `{value|${Math.round(val)}}\n{unit|${unit}}`,
           rich: {
             value: {
               fontSize: 50,

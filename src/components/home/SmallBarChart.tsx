@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "../../context/ThemeContext";
+import { useData } from "../../context/DataContext";
 
 export default function SmallBarChart() {
   const { c } = useTheme();
-  const value = 245;
-  const max = 350;
+  const { data } = useData();
+  
+  const value = data.params.tractive_force.value;
+  const max = data.params.tractive_force.max;
+  const norm_max = 200;
   const percentage = (value / max) * 100;
+  const normMaxPct = (norm_max / max) * 100;
   const [displayPct, setDisplayPct] = useState(0);
 
   useEffect(() => {
@@ -37,10 +42,10 @@ export default function SmallBarChart() {
         </div>
 
         {/* Максимальная отметка */}
-        <div className="absolute top-[-4px] right-[1%] flex flex-col items-center">
+        <div className="absolute top-[-4px] flex flex-col items-center" style={{ left: `${normMaxPct}%`, transform: "translateX(-50%)" }}>
           <div className="h-5 w-[3px] bg-[#E23F3F] rounded-full" />
           <div className="text-[10px] mt-1 whitespace-nowrap" style={{ color: c.textMuted }}>
-            макс: {max}
+            макс: {norm_max}
           </div>
         </div>
       </div>

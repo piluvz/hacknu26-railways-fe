@@ -1,14 +1,10 @@
 import ReactECharts from "echarts-for-react";
 import { ArrowBigUp } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
+import { useData } from "../../context/DataContext";
 
 // TODO: Replace with data from backend (pantograph_voltage field)
-const VOLTAGE_DATA = {
-  value: 24.5,
-  max: 29,
-  unit: "кВ",
-  status: "Норма",
-};
+
 const DATA_POINTS = [
   23.8, 24.2, 24.0, 24.6, 24.1, 23.7, 23.9, 24.0, 23.6, 24.1, 24.3, 24.0, 23.8,
   24.1, 24.3, 24.5,
@@ -40,6 +36,16 @@ function StatusPill({ status }: { status: string }) {
 
 export default function VoltageWidget() {
   const { c } = useTheme();
+  const { data } = useData();
+  const params = data?.params as any;
+  const currentParam = params?.pantograph_voltage || params?.temp_oil || {
+    name: "",
+    value: 0,
+    norm_max: 0,
+    unit: "—",
+    status: "Норма",
+    label: "Нет данных"
+  };
 
   const option = {
     backgroundColor: "transparent",
@@ -124,22 +130,22 @@ export default function VoltageWidget() {
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3">
           <span className="text-sm uppercase tracking-[0.08em]" style={{ color: c.textMuted }}>
-            Напряжение
+            {currentParam.name}
           </span>
           <div className="flex items-center gap-1">
             <ArrowBigUp size={13} color="#EABD52" />
             <span className="text-xs text-[#EABD52] tracking-[0.08em]">растет</span>
           </div>
         </div>
-        <StatusPill status={VOLTAGE_DATA.status} />
+        <StatusPill status={currentParam.status} />
       </div>
 
       {/* Value row */}
       <div className="flex items-baseline gap-2 mb-2">
-        <span className="text-4xl font-semibold">{VOLTAGE_DATA.value}</span>
-        <span className="text-sm">{VOLTAGE_DATA.unit}</span>
+        <span className="text-4xl font-semibold">{currentParam.value}</span>
+        <span className="text-sm">{currentParam.unit}</span>
         <span className="text-sm ml-1" style={{ color: c.textMuted }}>
-          норма {VOLTAGE_DATA.max} {VOLTAGE_DATA.unit}
+          норма до {currentParam.norm_max || 0} {currentParam.unit}
         </span>
       </div>
 

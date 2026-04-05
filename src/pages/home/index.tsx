@@ -45,7 +45,8 @@ export default function HomePage() {
         return;
       }
 
-      console.log(response);
+      const data = await response.json();
+      setData(data);
     })()
   }, [ distanceSelected ]);
 
@@ -58,8 +59,8 @@ export default function HomePage() {
 
     ws.onmessage = (event: any) => {
       const data = JSON.parse(event.data);
-      setData(data);
-      console.log("Message:", data);
+      if(distanceSelected === null) setData(data);
+     // console.log("Message:", data);
     };
 
     ws.onclose = () => {

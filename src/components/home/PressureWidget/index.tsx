@@ -24,7 +24,7 @@ export default function PressureWidget() {
 
             <div className="mb-[24px]" style={{ color: c.text }}>
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8, width: "100%", fontWeight: 400, fontSize: 12 }}>
-                    <span>Двигатель</span>
+                    <span>{ data.params.pressure_brake.name }</span>
                     <span style={{
                         color: data.params.pressure_brake.status === "норма"
                             ? "#49C86E"
@@ -47,7 +47,7 @@ export default function PressureWidget() {
 
             <div className="mb-[24px]" style={{ color: c.text }}>
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8, width: "100%", fontWeight: 400, fontSize: 12 }}>
-                    <span>Масло</span>
+                    <span>{ data.params.pressure_oil.name }</span>
                     <span style={{
                         color: data.params.pressure_oil.status === "норма"
                             ? "#49C86E"
@@ -70,7 +70,7 @@ export default function PressureWidget() {
 
             <div className="mb-[24px]" style={{ color: c.text }}>
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8, width: "100%", fontWeight: 400, fontSize: 12 }}>
-                    <span>Main Tank</span>
+                    <span>{ data.params.pressure_main_tank.name }</span>
                     <span style={{
                         color: data.params.pressure_main_tank.status === "норма"
                             ? "#49C86E"
@@ -93,7 +93,7 @@ export default function PressureWidget() {
 
             <div className="mb-[24px]" style={{ color: c.text }}>
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8, width: "100%", fontWeight: 400, fontSize: 12 }}>
-                    <span>Воздух</span>
+                    <span>{ data.params.pressure_air.name }</span>
                     <span style={{
                         color: data.params.pressure_air.status === "норма"
                             ? "#49C86E"

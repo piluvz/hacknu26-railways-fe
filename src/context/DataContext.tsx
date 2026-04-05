@@ -206,6 +206,7 @@ interface TelemetryData {
 ],
   params: {
     speed: {
+      name: string;
       max: number;
       min: number;
       unit: string;
@@ -219,6 +220,7 @@ interface TelemetryData {
       norm_max: number;
     },
     temp_air: {
+      name: string;
       max: number;
       min: number;
       unit: string;
@@ -246,6 +248,7 @@ interface TelemetryData {
       norm_max: number;
     },
     temp_motor: {
+      name: string;
       max: number;
       min: number;
       unit: string;
@@ -259,6 +262,7 @@ interface TelemetryData {
       norm_max: number;
     },
     brake_force: {
+      name: string;
       max: number;
       min: number;
       unit: string;
@@ -272,7 +276,7 @@ interface TelemetryData {
       norm_max: number;
     },
     fuel_liters?: {
-      name?: string;
+      name: string;
       max: number;
       min: number;
       unit: string;
@@ -286,7 +290,7 @@ interface TelemetryData {
       norm_max: number;
     },
     energy_usage?: {
-      name?: string;
+      name: string;
       max: number;
       min: number;
       unit: string;
@@ -300,6 +304,7 @@ interface TelemetryData {
       norm_max: number;
     },
     pressure_air: {
+      name: string;
       max: number;
       min: number;
       unit: string;
@@ -313,6 +318,7 @@ interface TelemetryData {
       norm_max: number;
     },
     pressure_oil: {
+      name: string;
       max: number;
       min: number;
       unit: string;
@@ -326,6 +332,7 @@ interface TelemetryData {
       norm_max: number;
     },
     current_ampere: {
+      name: string;
       max: number;
       min: number;
       unit: string;
@@ -339,6 +346,7 @@ interface TelemetryData {
       norm_max: number;
     },
     pressure_brake: {
+      name: string;
       max: number;
       min: number;
       unit: string;
@@ -352,6 +360,7 @@ interface TelemetryData {
       norm_max: number;
     },
     tractive_force: {
+      name: string;
       max: number;
       min: number;
       unit: string;
@@ -365,6 +374,7 @@ interface TelemetryData {
       norm_max: number;
     },
     temp_converters: {
+      name: string;
       max: number;
       min: number;
       unit: string;
@@ -378,6 +388,7 @@ interface TelemetryData {
       norm_max: number;
     },
     pressure_main_tank: {
+      name: string;
       max: number;
       min: number;
       unit: string;
@@ -430,13 +441,13 @@ interface TelemetryData {
         }
     ],
     info: {
-      title: string;
+      name: string;
       recommendation: string;
       distance_left_km: number;
-      time_left: string;
+      time_left_h: number;
       status: "норма" | "предупреждение" | "критично";
     },
-    time_left: string
+    time_left_h: number
   }
 }
 
@@ -455,6 +466,7 @@ const MOCK_JSON : TelemetryData = {
   ],
   params: {
     speed: {
+      name: "Скорость",
       max: 200,
       min: 0,
       unit: "км/ч",
@@ -468,6 +480,7 @@ const MOCK_JSON : TelemetryData = {
       norm_max: 50
     },
     temp_air: {
+      name: "Температура воздуха",
       max: 200,
       min: -20,
       unit: "°C",
@@ -495,6 +508,7 @@ const MOCK_JSON : TelemetryData = {
       norm_max: 50
     },
     temp_motor: {
+      name: "Температура двигатель",
       max: 200,
       min: 0,
       unit: "°C",
@@ -508,6 +522,7 @@ const MOCK_JSON : TelemetryData = {
       norm_max: 50
     },
     brake_force: {
+      name: "Тормозное усилие",
       max: 1000,
       min: 0,
       unit: "кПа",
@@ -521,6 +536,7 @@ const MOCK_JSON : TelemetryData = {
       norm_max: 50
     },
     fuel_liters: {
+      name: "Топливо",
       max: 1500,
       min: 0,
       unit: "л",
@@ -534,6 +550,7 @@ const MOCK_JSON : TelemetryData = {
       norm_max: 1200
     },
     pressure_air: {
+      name: "Давление воздуха",
       max: 3.0,
       min: 0,
       unit: "бар",
@@ -547,6 +564,7 @@ const MOCK_JSON : TelemetryData = {
       norm_max: 2.8
     },
     pressure_oil: {
+      name: "Давление масла в двигателе",
       max: 7.0,
       min: 0,
       unit: "бар",
@@ -560,6 +578,7 @@ const MOCK_JSON : TelemetryData = {
       norm_max: 4.2
     },
     current_ampere: {
+      name: "Ток",
       max: 2000,
       min: 0,
       unit: "А",
@@ -573,6 +592,7 @@ const MOCK_JSON : TelemetryData = {
       norm_max: 50
     },
     pressure_brake: {
+      name: "Давление тормозной магистрали",
       max: 9.0,
       min: 0,
       unit: "бар",
@@ -586,6 +606,7 @@ const MOCK_JSON : TelemetryData = {
       norm_max: 6.7
     },
     tractive_force: {
+      name: "Тяговое усилие",
       max: 300,
       min: 0,
       unit: "кН",
@@ -599,6 +620,7 @@ const MOCK_JSON : TelemetryData = {
       norm_max: 210
     },
     temp_converters: {
+      name: "Температура преобразователей",
       max: 200,
       min: 0,
       unit: "°C",
@@ -612,6 +634,7 @@ const MOCK_JSON : TelemetryData = {
       norm_max: 50
     },
     pressure_main_tank: {
+      name: "Давление главного резервуара",
       max: 9.0,
       min: 0,
       unit: "бар",
@@ -668,13 +691,13 @@ const MOCK_JSON : TelemetryData = {
       }
     ],
     info: {
-      title: "Жилая зона",
+      name: "Жилая зона",
       recommendation: "Снизить скорость",
       distance_left_km: 30,
-      time_left: "14 мин",
+      time_left_h: 1,
       status: "предупреждение"
     },
-    time_left: "1ч 02мин",
+    time_left_h: 2.93
   }
 };
 

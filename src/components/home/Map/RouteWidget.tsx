@@ -38,10 +38,10 @@ export default function RouteWidget() {
             </div>
 
             <div className="text-[14px]" style={{ color: c.text }}>
-                <span className="inline-block mr-[14px]">{ data.route_info.info.title }</span>
-                <span style={{ color: c.textMuted }}>через { data.route_info.info.distance_left_km } км · ~{ data.route_info.info.time_left }</span>
+                <span className="inline-block mr-[14px]">{ data.route_info.info.name }</span>
+                <span style={{ color: c.textMuted }}>через { data.route_info.info.distance_left_km } км · ~{ Math.round(data.route_info.info.time_left_h) } часов</span>
             </div>
-            <div className="text-[14px] font-bold" style={{ color: infoColor }}>{ data.route_info.info.recommendation }</div>
+            <div className="text-[14px] font-bold" style={{ color: infoColor, textTransform: "capitalize" }}>{ data.route_info.info.recommendation }</div>
 
             <div className="my-[15px]" style={{ borderBottom: `1px solid ${c.border}` }} />
 
@@ -49,7 +49,7 @@ export default function RouteWidget() {
 
             <div className="text-[14px]" style={{ color: c.text }}>
                 <span className="inline-block mr-[14px]">{ nextStation.name }</span>
-                <span style={{ color: c.textMuted }}>через { Math.round(distanceLeft) } км · ~{ data.route_info.time_left }</span>
+                <span style={{ color: c.textMuted }}>через { Math.round(distanceLeft) } км · ~{ Math.round(data.route_info.time_left_h) } часов</span>
             </div>
 
             <div className="my-[15px]" style={{ borderBottom: `1px solid ${c.border}` }} />

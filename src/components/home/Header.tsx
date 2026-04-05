@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, LogOut } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import { useData } from "../../context/DataContext";
 import { useAuth } from "../../context/AuthContext";
@@ -17,7 +17,16 @@ export default function Header() {
     const [opacity, setOpacity] = useState(1);
     const { isDark, toggle, c } = useTheme();
     const { data } = useData();
-    const { role, selectedTrainId, setSelectedTrainId } = useAuth();
+    const { role, selectedTrainId, setSelectedTrainId, setToken, setTrainId, setRole } = useAuth();
+
+    function handleLogout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("trainId");
+        localStorage.removeItem("role");
+        setToken("");
+        setTrainId("");
+        setRole("");
+    }
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -85,6 +94,20 @@ export default function Header() {
             >
                 {isDark ? <Moon size={13} /> : <Sun size={13} />}
                 {isDark ? "Ночной режим" : "Светлый режим"}
+            </button>
+
+            {/* Logout */}
+            <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium transition-opacity hover:opacity-80"
+                style={{
+                    border: `1.5px solid ${c.border}`,
+                    color: c.text,
+                    backgroundColor: "transparent",
+                }}
+            >
+                <LogOut size={13} />
+                Выйти
             </button>
 
             <div className="font-semibold">

@@ -7,8 +7,30 @@ interface LoginFormData {
   password: string;
 }
 
+function parseToken(token: string) {
+  try {
+    // 1. Get payload (middle part of JWT)
+    const base64Payload = token.split(".")[1];
+    if (!base64Payload) return null;
+
+    // 2. Decode base64 (handle UTF-8 properly)
+    const json = decodeURIComponent(
+      atob(base64Payload)
+        .split("")
+        .map(c => "%" + c.charCodeAt(0).toString(16).padStart(2, "0"))
+        .join("")
+    );
+
+    // 3. Parse JSON
+    const data = JSON.parse(json);
+    return data;
+  } catch (e) {
+    return null;
+  }
+}
+
 const LoginPage: React.FC = () => {
-  const { setToken } = useAuth();
+  const { setToken, setTrainId, setRole } = useAuth();
   const [formData, setFormData] = useState<LoginFormData>({
     username: "",
     password: "",
@@ -54,6 +76,9 @@ const LoginPage: React.FC = () => {
       const data = await response.json();
       localStorage.setItem("token", data.token);
       setToken(data.token);
+      const parsedToken = parseToken(data.token);
+      setTrainId(parsedToken?.train_id || "");
+      setRole(parsedToken?.role || "");
 
       setSuccessMessage("Login successful! Redirecting...");
       setTimeout(() => {
